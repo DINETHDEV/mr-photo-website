@@ -6,9 +6,17 @@ const path = require('path');
 const dotenv = require('dotenv');
 
 // Load environment variables
-dotenv.config();
+dotenv.config(); 
 
-// Crash early with a helpful message if critical env vars are missing
+// --- DIAGNOSTIC LOGGING ---
+console.log('🔍 [DIAGNOSTIC] Environment Check:');
+console.log(' - MONGODB_URI:', process.env.MONGODB_URI ? '✅ SET' : '❌ MISSING');
+console.log(' - JWT_SECRET:', process.env.JWT_SECRET ? '✅ SET' : '❌ MISSING');
+console.log(' - PORT:', process.env.PORT || 'Using default: 5000');
+console.log(' - CWD:', process.cwd());
+// --------------------------
+
+// Crash early if critical env vars are missing
 if (!process.env.MONGODB_URI) {
   console.error('❌ FATAL: MONGODB_URI environment variable is not set!');
   console.error('Check your Render Dashboard → Environment tab.');
