@@ -14,7 +14,9 @@ import {
   DollarSign,
   Tag,
   Save,
-  X
+  X,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import GlassCard from '@/components/GlassCard';
@@ -25,9 +27,11 @@ const categories = ['restoration', 'design', 'frames', 'printing', 'laminating']
 export default function ProductsManagement() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [btnLoading, setBtnLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
+  
   const [formData, setFormData] = useState({
     name: '',
     category: 'restoration',
@@ -35,6 +39,8 @@ export default function ProductsManagement() {
     description: '',
     isActive: true
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     loadProducts();
@@ -61,6 +67,7 @@ export default function ProductsManagement() {
         description: product.description || '',
         isActive: product.isActive
       });
+      setImagePreview(product.image || null);
     } else {
       setCurrentProduct(null);
       setFormData({
@@ -70,24 +77,48 @@ export default function ProductsManagement() {
         description: '',
         isActive: true
       });
+      setImagePreview(null);
     }
+    setImageFile(null);
     setIsModalOpen(true);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setBtnLoading(true);
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('category', formData.category);
+    data.append('price', formData.price);
+    data.append('description', formData.description);
+    data.append('isActive', formData.isActive);
+    if (imageFile) data.append('image', imageFile);
+
     try {
       if (currentProduct) {
-        await putAdminData(`products/${currentProduct._id}`, formData);
+        await putAdminData(`products/${currentProduct._id}`, data, true);
         toast.success("Service updated");
       } else {
-        await postAdminData('products', formData);
+        await postAdminData('products', data, true);
         toast.success("New service added");
       }
       setIsModalOpen(false);
       loadProducts();
     } catch (error) {
       toast.error("Action failed");
+    } finally {
+      setBtnLoading(false);
     }
   };
 
@@ -150,8 +181,12 @@ export default function ProductsManagement() {
          {filteredProducts.map((product) => (
             <GlassCard key={product._id} className={`group border-white/5 hover:border-primary/20 ${!product.isActive ? 'opacity-60' : ''}`}>
                <div className="flex justify-between items-start mb-6">
-                  <div className="p-3 glass rounded-xl text-primary bg-primary/10">
-                     <Tag size={20} />
+                  <div className="w-12 h-12 glass rounded-xl text-primary bg-primary/10 overflow-hidden">
+                     {product.image ? (
+                        <img src={product.image} className="w-full h-full object-cover" alt="Service" />
+                     ) : (
+                        <div className="w-full h-full flex items-center justify-center"><Tag size={20} /></div>
+                     )}
                   </div>
                   <div className="flex gap-2">
                      <button onClick={() => openModal(product)} className="p-2 glass rounded-lg text-gray-500 hover:text-primary transition-colors hover:border-primary/20"><Edit3 size={16}/></button>
@@ -191,11 +226,11 @@ export default function ProductsManagement() {
 
       {/* Modal */}
       {isModalOpen && (
-         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm overflow-y-auto">
             <motion.div 
                initial={{ opacity: 0, scale: 0.9, y: 20 }}
                animate={{ opacity: 1, scale: 1, y: 0 }}
-               className="w-full max-w-lg glass p-8 md:p-10 border-primary/20 shadow-neon relative"
+               className="w-full max-w-lg glass p-8 md:p-10 border-primary/20 shadow-neon relative my-auto"
             >
                <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors"><X size={24}/></button>
                
@@ -205,6 +240,36 @@ export default function ProductsManagement() {
                </div>
 
                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Image Upload */}
+                  <div className="space-y-2">
+                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Service Photo</label>
+                     <div className="flex items-center gap-4">
+                        <div className="w-20 h-20 glass rounded-2xl border-white/10 overflow-hidden relative group shrink-0">
+                           {imagePreview ? (
+                              <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                           ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-500"><ImageIcon size={24}/></div>
+                           )}
+                           <label htmlFor="product-image" className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer text-white">
+                              <Upload size={18} />
+                           </label>
+                        </div>
+                        <div className="space-y-1">
+                           <label htmlFor="product-image" className="text-sm font-bold text-primary cursor-pointer hover:underline">
+                              {imagePreview ? 'Change Image' : 'Upload Image'}
+                           </label>
+                           <p className="text-[10px] text-gray-500 font-bold uppercase">PNG, JPG up to 5MB</p>
+                           <input 
+                              type="file" 
+                              id="product-image" 
+                              className="hidden" 
+                              accept="image/*"
+                              onChange={handleImageChange}
+                           />
+                        </div>
+                     </div>
+                  </div>
+
                   <div className="space-y-2">
                      <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Service Name</label>
                      <input 
@@ -212,7 +277,7 @@ export default function ProductsManagement() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none transition-all"
                      />
                   </div>
 
@@ -222,7 +287,7 @@ export default function ProductsManagement() {
                         <select 
                            value={formData.category}
                            onChange={(e) => setFormData({...formData, category: e.target.value})}
-                           className="w-full bg-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none appearance-none"
+                           className="w-full bg-black border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none appearance-none cursor-pointer"
                         >
                            {categories.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
                         </select>
@@ -234,7 +299,7 @@ export default function ProductsManagement() {
                            required
                            value={formData.price}
                            onChange={(e) => setFormData({...formData, price: e.target.value})}
-                           className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none"
+                           className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none transition-all"
                         />
                      </div>
                   </div>
@@ -244,7 +309,7 @@ export default function ProductsManagement() {
                      <textarea 
                         value={formData.description}
                         onChange={(e) => setFormData({...formData, description: e.target.value})}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none h-24 resize-none"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-primary/50 outline-none h-24 resize-none transition-all"
                      />
                   </div>
 
@@ -254,13 +319,18 @@ export default function ProductsManagement() {
                         id="isActive"
                         checked={formData.isActive}
                         onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-                        className="w-5 h-5 accent-primary bg-black border border-white/10"
+                        className="w-5 h-5 accent-primary bg-black border border-white/10 cursor-pointer"
                      />
-                     <label htmlFor="isActive" className="text-sm font-bold text-gray-300">Active (Visible on website)</label>
+                     <label htmlFor="isActive" className="text-sm font-bold text-gray-300 cursor-pointer">Active (Visible on website)</label>
                   </div>
 
-                  <button type="submit" className="w-full btn-primary py-4 text-lg shadow-neon flex items-center justify-center gap-3 group">
-                     <Save size={20} /> {currentProduct ? 'Update Service' : 'Save New Service'}
+                  <button 
+                    type="submit" 
+                    disabled={btnLoading}
+                    className="w-full btn-primary py-4 text-lg shadow-neon flex items-center justify-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                     {btnLoading ? <Loader2 className="animate-spin" size={20}/> : <Save size={20} />} 
+                     {currentProduct ? 'Update Service' : 'Save New Service'}
                   </button>
                </form>
             </motion.div>

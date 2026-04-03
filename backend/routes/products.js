@@ -3,6 +3,8 @@ const asyncHandler = require('express-async-handler');
 const Product = require('../models/Product');
 const { protect, admin } = require('../middleware/auth');
 
+const { upload } = require('../utils/cloudinary');
+
 const router = express.Router();
 
 // @route   GET /api/products
@@ -24,14 +26,15 @@ router.get('/all', protect, admin, asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @desc    Create a product
 // @access  Private/Admin
-router.post('/', protect, admin, asyncHandler(async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), asyncHandler(async (req, res) => {
   const { name, category, price, description } = req.body;
 
   const product = new Product({
     name,
     category,
     price,
-    description
+    description,
+    image: req.file ? req.file.path : undefined
   });
 
   const createdProduct = await product.save();
@@ -41,7 +44,7 @@ router.post('/', protect, admin, asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @desc    Update a product
 // @access  Private/Admin
-router.put('/:id', protect, admin, asyncHandler(async (req, res) => {
+router.put('/:id', protect, admin, upload.single('image'), asyncHandler(async (req, res) => {
   const { name, category, price, description, isActive } = req.body;
 
   const product = await Product.findById(req.params.id);
@@ -52,6 +55,10 @@ router.put('/:id', protect, admin, asyncHandler(async (req, res) => {
     product.price = price || product.price;
     product.description = description || product.description;
     if (isActive !== undefined) product.isActive = isActive;
+    
+    if (req.file) {
+      product.image = req.file.path;
+    }
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

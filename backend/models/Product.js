@@ -21,6 +21,9 @@ const productSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  image: {
+    type: String, // Cloudinary URL
   }
 }, { timestamps: true });
 

@@ -101,11 +101,22 @@ export default function Services() {
                 <div className="space-y-4">
                   {items.map((item, iIdx) => (
                     <div key={iIdx} className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-colors group/item">
-                       <div className="flex flex-col">
-                          <span className="text-white font-medium group-hover/item:text-primary transition-colors">{item.name}</span>
-                          <span className="text-xs text-gray-500 font-medium italic">{item.description || 'Professional processing included'}</span>
+                       <div className="flex items-center gap-4 flex-grow">
+                          {item.image ? (
+                             <div className="w-12 h-12 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                                <img src={item.image} className="w-full h-full object-cover" alt={item.name} />
+                             </div>
+                          ) : (
+                             <div className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-gray-700">
+                                <ImageIcon size={20} />
+                             </div>
+                          )}
+                          <div className="flex flex-col">
+                             <span className="text-white font-medium group-hover/item:text-primary transition-colors">{item.name}</span>
+                             <span className="text-xs text-gray-500 font-medium italic line-clamp-1">{item.description || 'Professional processing included'}</span>
+                          </div>
                        </div>
-                       <div className="flex items-center gap-4">
+                       <div className="flex items-center gap-4 shrink-0">
                           <span className="text-primary font-black tracking-tighter">LKR {item.price.toLocaleString()}</span>
                           <Check className="text-primary/20 group-hover/item:text-primary transition-colors" size={16} />
                        </div>
