@@ -102,7 +102,7 @@ export default function Services() {
                   {items.map((item, iIdx) => (
                     <Link 
                       key={iIdx} 
-                      href={`/products/${item._id}`}
+                      href={`/products?id=${item._id}`}
                       className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-all group/item cursor-pointer"
                     >
                        <div className="flex items-center gap-4 flex-grow">
