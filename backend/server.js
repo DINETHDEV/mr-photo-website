@@ -60,10 +60,13 @@ const PORT = process.env.PORT || 5000;
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('✅ MongoDB Connected');
+    console.log('✅ MongoDB Connected Successfully');
     app.listen(PORT, () => console.log(`🚀 MR Photo API running on port ${PORT}`));
   })
   .catch((err) => {
-    console.error('❌ MongoDB connection error:', err.message);
+    console.error('❌ MONGODB CONNECTION ERROR:', err.message);
+    if (err.name === 'MongoNetworkError') {
+      console.error('👉 TIP: Check your MongoDB Atlas "Network Access" settings and allow "0.0.0.0/0"');
+    }
     process.exit(1);
   });
