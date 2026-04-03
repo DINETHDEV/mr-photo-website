@@ -98,9 +98,13 @@ export default function Services() {
                   <h2 className="text-2xl font-bold text-white capitalize">{catName}</h2>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {items.map((item, iIdx) => (
-                    <div key={iIdx} className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-colors group/item">
+                    <Link 
+                      key={iIdx} 
+                      href={`/products/${item._id}`}
+                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-all group/item cursor-pointer"
+                    >
                        <div className="flex items-center gap-4 flex-grow">
                           {item.image ? (
                              <div className="w-12 h-12 rounded-lg overflow-hidden border border-white/10 shrink-0">
@@ -120,7 +124,7 @@ export default function Services() {
                           <span className="text-primary font-black tracking-tighter">LKR {item.price.toLocaleString()}</span>
                           <Check className="text-primary/20 group-hover/item:text-primary transition-colors" size={16} />
                        </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
 

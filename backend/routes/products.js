@@ -7,12 +7,18 @@ const { upload } = require('../utils/cloudinary');
 
 const router = express.Router();
 
-// @route   GET /api/products
-// @desc    Fetch all products
+// @route   GET /api/products/:id
+// @desc    Fetch a single product
 // @access  Public
-router.get('/', asyncHandler(async (req, res) => {
-  const products = await Product.find({ isActive: true });
-  res.json(products);
+router.get('/:id', asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
 }));
 
 // @route   GET /api/products/all
