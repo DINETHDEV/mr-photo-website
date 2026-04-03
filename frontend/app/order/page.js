@@ -26,7 +26,7 @@ import { fetchData, postData } from '@/utils/api';
 function OrderFormContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initialPackageId = searchParams.get('packageId');
+  const initialPackageId = searchParams.get('packageId') || searchParams.get('package');
 
   const [loading, setLoading] = useState(false);
   const [fetchingPackages, setFetchingPackages] = useState(true);
