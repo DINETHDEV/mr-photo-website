@@ -1,272 +1,395 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShoppingBag, 
-  Search, 
-  ExternalLink, 
-  Eye,
-  Calendar,
-  Phone,
-  User,
-  MessageSquare,
+  User, 
+  Phone, 
+  MapPin, 
+  MessageSquare, 
+  Upload, 
+  CheckCircle2, 
+  Loader2, 
+  ArrowRight,
+  Sparkles,
   Image as ImageIcon,
-  Loader2,
-  MapPin,
-  CheckCircle2,
-  Trash2,
-  X
+  Package as PackageIcon,
+  X,
+  Camera
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import GlassCard from '@/components/GlassCard';
-import { fetchAdminData, putAdminData } from '@/utils/adminApi';
+import { fetchData, postData } from '@/utils/api';
 
-const statuses = ['All', 'Pending', 'Processing', 'Completed', 'Cancelled'];
+function OrderFormContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initialPackageId = searchParams.get('packageId');
 
-export default function OrdersManagement() {
-  const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeStatus, setActiveStatus] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fetchingPackages, setFetchingPackages] = useState(true);
+  const [packages, setPackages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    customerName: '',
+    phone: '',
+    address: '',
+    serviceType: initialPackageId ? 'package' : 'custom',
+    packageId: initialPackageId || '',
+    uploadedImage: '',
+    message: ''
+  });
+
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    loadOrders();
+    const loadPackages = async () => {
+      try {
+        const data = await fetchData('packages');
+        setPackages(data || []);
+      } catch (error) {
+        toast.error("Failed to load packages");
+      } finally {
+        setFetchingPackages(false);
+      }
+    };
+    loadPackages();
   }, []);
 
-  useEffect(() => {
-    let result = orders;
-    if (activeStatus !== 'All') {
-      result = result.filter(o => o.status === activeStatus);
-    }
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      result = result.filter(o => 
-        o.customerName.toLowerCase().includes(term) || 
-        o.phone.includes(term) ||
-        (o.packageId?.name && o.packageId.name.toLowerCase().includes(term))
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
+
+    // Upload to Cloudinary
+    setUploading(true);
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'ml_default'); // Fallback preset
+    data.append('cloud_name', 'dguist2qh');
+
+    try {
+      const resp = await fetch(
+        `https://api.cloudinary.com/v1_1/dguist2qh/image/upload`,
+        { method: 'POST', body: data }
       );
-    }
-    setFilteredOrders(result);
-  }, [activeStatus, searchTerm, orders]);
-
-  const loadOrders = async () => {
-    try {
-      const data = await fetchAdminData('orders');
-      setOrders(data || []);
-      setLoading(false);
-    } catch (error) {
-      toast.error("Failed to load orders");
-      setLoading(false);
+      const res = await resp.json();
+      setFormData(prev => ({ ...prev, uploadedImage: res.secure_url }));
+      toast.success("Image uploaded successfully!");
+    } catch (err) {
+      toast.error("Image upload failed");
+      setImagePreview(null);
+    } finally {
+      setUploading(false);
     }
   };
 
-  const updateStatus = async (id, newStatus) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.uploadedImage) {
+      toast.error("Please upload your photo first");
+      return;
+    }
+
+    setLoading(true);
     try {
-      await putAdminData(`orders/${id}/status`, { status: newStatus });
-      toast.success(`Order marked as ${newStatus}`);
-      loadOrders();
-      if (selectedOrder?._id === id) setSelectedOrder(prev => ({ ...prev, status: newStatus }));
+      await postData('orders', formData);
+      toast.success("Order placed successfully! We will contact you soon.");
+      router.push('/');
     } catch (error) {
-      toast.error("Update failed");
+      toast.error("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  if (loading) return (
-    <div className="flex items-center justify-center h-96">
-      <Loader2 className="animate-spin text-primary" size={48} />
-    </div>
-  );
 
   return (
-    <div className="space-y-8 pb-20">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-         <div>
-            <h1 className="text-3xl font-black text-white flex items-center gap-3">
-               <ShoppingBag className="text-primary" size={32} /> 
-               Orders <span className="text-primary italic">Management</span>
-            </h1>
-            <p className="text-gray-500 text-sm mt-1">Track and manage your studio orders in real-time.</p>
-         </div>
-
-         <div className="flex flex-wrap gap-2 glass p-1.5 rounded-2xl">
-            {statuses.map(s => (
-               <button 
-                  key={s}
-                  onClick={() => setActiveStatus(s)}
-                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                     activeStatus === s ? 'bg-primary text-black shadow-neon' : 'text-gray-400 hover:text-white'
-                  }`}
-               >
-                  {s}
-               </button>
-            ))}
-         </div>
+    <div className="max-w-4xl mx-auto space-y-12">
+      <header className="text-center space-y-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-primary/20 text-primary text-[10px] font-black uppercase tracking-[4px]"
+        >
+          <ShoppingBag size={14} /> Secure Ordering
+        </motion.div>
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-4xl md:text-6xl font-black text-white italic tracking-tighter"
+        >
+          BRING MEMORIES TO <span className="text-primary italic underline decoration-primary/20 underline-offset-8">LIFE.</span>
+        </motion.h1>
       </header>
 
-      {/* Search Bar */}
-      <div className="relative group">
-         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" size={20} />
-         <input 
-            type="text"
-            placeholder="Search by name, phone or service..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-3xl py-5 pl-16 pr-6 text-white focus:border-primary/50 focus:bg-white/10 transition-all outline-none"
-         />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-         {/* Orders List */}
-         <div className={`lg:col-span-8 flex flex-col gap-4 ${selectedOrder ? 'hidden md:flex' : 'flex'}`}>
-            {filteredOrders.length > 0 ? filteredOrders.map((order) => (
-               <GlassCard 
-                  key={order._id}
-                  className={`p-6 flex flex-col md:flex-row items-center gap-6 cursor-pointer border-white/5 hover:border-primary/20 transition-all group ${selectedOrder?._id === order._id ? 'border-primary shadow-neon-sm bg-primary/5' : ''}`}
-                  onClick={() => setSelectedOrder(order)}
-               >
-                  <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 text-primary group-hover:bg-primary group-hover:text-black group-hover:border-none transition-all">
-                     <User size={24} />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        {/* Left Column: Form */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-3"
+        >
+          <GlassCard className="p-8 md:p-10 border-primary/10 shadow-neon">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-6">
+                <h3 className="text-xs font-black text-primary uppercase tracking-[5px] flex items-center gap-2">
+                  <User size={14} /> Basic Information
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/50" size={18} />
+                      <input 
+                        type="text" 
+                        required
+                        placeholder="John Doe"
+                        value={formData.customerName}
+                        onChange={(e) => setFormData({...formData, customerName: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all"
+                      />
+                    </div>
                   </div>
                   
-                  <div className="flex-grow flex flex-col md:flex-row justify-between gap-4 w-full">
-                     <div className="space-y-1 text-center md:text-left">
-                        <h3 className="text-white font-bold text-lg">{order.customerName}</h3>
-                        <p className="text-xs text-gray-500 font-medium flex items-center justify-center md:justify-start gap-1">
-                           <Phone size={12} /> {order.phone}
-                        </p>
-                        <p className="text-[10px] text-primary uppercase font-bold tracking-[2px] pt-1">
-                           {order.serviceType === 'package' ? (order.packageId?.name || 'Gift Package') : 'Custom Service'}
-                        </p>
-                     </div>
-
-                     <div className="flex flex-col items-center md:items-end justify-center gap-2">
-                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                           order.status === 'Completed' ? 'bg-emerald-400 text-black' : 
-                           order.status === 'Processing' ? 'bg-blue-500 text-black' :
-                           order.status === 'Cancelled' ? 'bg-red-500 text-black' :
-                           'bg-white/10 text-white'
-                        }`}>
-                           {order.status}
-                        </span>
-                        <span className="text-[10px] text-gray-600 font-bold uppercase tracking-widest flex items-center gap-1">
-                           <Calendar size={12} /> {new Date(order.createdAt).toLocaleDateString()}
-                        </span>
-                     </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
+                    <div className="relative">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/50" size={18} />
+                      <input 
+                        type="tel" 
+                        required
+                        placeholder="071 234 5678"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all"
+                      />
+                    </div>
                   </div>
-                  
-                  <div className="hidden md:flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                     <button className="p-3 glass rounded-xl text-primary hover:bg-primary hover:text-black transition-all">
-                        <Eye size={16} />
-                     </button>
-                  </div>
-               </GlassCard>
-            )) : (
-               <div className="text-center py-40 glass rounded-[40px] border-dashed border-white/10">
-                  <ShoppingBag size={64} className="mx-auto text-gray-800 mb-6" />
-                  <p className="text-gray-500 text-lg">No orders matching your criteria.</p>
-               </div>
-            )}
-         </div>
+                </div>
 
-         {/* Order Detail View */}
-         <div className={`lg:col-span-4 ${selectedOrder ? 'block' : 'hidden lg:block lg:opacity-30'}`}>
-            {selectedOrder ? (
-               <GlassCard className="sticky top-10 border-primary/20 p-8 space-y-8">
-                  <div className="flex justify-between items-start">
-                     <div className="space-y-1">
-                        <span className="text-[10px] text-primary font-black uppercase tracking-[3px]">Order Detail</span>
-                        <h2 className="text-2xl font-black text-white">{selectedOrder.customerName}</h2>
-                        <span className="text-xs text-gray-500 font-mono">#{selectedOrder._id.slice(-8).toUpperCase()}</span>
-                     </div>
-                     <button onClick={() => setSelectedOrder(null)} className="md:hidden p-2 glass rounded-lg">
-                        <X size={18} />
-                     </button>
-                  </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Delivery Address</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-4 text-primary/50" size={18} />
+                      <textarea 
+                        required
+                        placeholder="Enter your full address for frame delivery..."
+                        value={formData.address}
+                        onChange={(e) => setFormData({...formData, address: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all h-24 resize-none"
+                      />
+                    </div>
+                </div>
+              </div>
 
-                  <div className="space-y-6">
-                     <div className="space-y-4">
-                        <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest border-b border-white/5 pb-2">Status Actions</h4>
-                        <div className="grid grid-cols-2 gap-3">
-                           <button 
-                            onClick={() => updateStatus(selectedOrder._id, 'Processing')}
-                            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-400/20 hover:bg-blue-500 hover:text-white transition-all">
-                              Process
-                           </button>
-                           <button 
-                            onClick={() => updateStatus(selectedOrder._id, 'Completed')}
-                            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 hover:bg-emerald-500 hover:text-white transition-all">
-                              Complete
-                           </button>
-                           <button 
-                            onClick={() => updateStatus(selectedOrder._id, 'Cancelled')}
-                             className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-400/20 hover:bg-red-500 hover:text-white transition-all col-span-2">
-                              Cancel Order
-                           </button>
-                        </div>
-                     </div>
+              <div className="space-y-6 pt-6 border-t border-white/5">
+                <h3 className="text-xs font-black text-primary uppercase tracking-[5px] flex items-center gap-2">
+                  <Sparkles size={14} /> Service Selection
+                </h3>
 
-                     <div className="space-y-4 pt-4 border-t border-white/5">
-                        <div className="flex items-start gap-4">
-                           <MapPin className="text-primary mt-1 shrink-0" size={18} />
-                           <div>
-                              <span className="text-[10px] text-gray-600 font-black uppercase tracking-widest block mb-1">Address</span>
-                              <p className="text-sm text-gray-300 leading-relaxed font-medium">{selectedOrder.address}</p>
-                           </div>
-                        </div>
+                <div className="grid grid-cols-2 gap-4">
+                   <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, serviceType: 'custom', packageId: ''})}
+                    className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${formData.serviceType === 'custom' ? 'bg-primary/10 border-primary shadow-neon-sm' : 'bg-white/5 border-white/10 text-gray-500'}`}
+                   >
+                     <Camera size={20} />
+                     <span className="text-[10px] font-black uppercase tracking-widest">Custom Restoration</span>
+                   </button>
+                   <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, serviceType: 'package'})}
+                    className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${formData.serviceType === 'package' ? 'bg-primary/10 border-primary shadow-neon-sm' : 'bg-white/5 border-white/10 text-gray-500'}`}
+                   >
+                     <PackageIcon size={20} />
+                     <span className="text-[10px] font-black uppercase tracking-widest">Gift Package</span>
+                   </button>
+                </div>
 
-                        <div className="flex items-start gap-4">
-                           <MessageSquare className="text-primary mt-1 shrink-0" size={18} />
-                           <div>
-                              <span className="text-[10px] text-gray-600 font-black uppercase tracking-widest block mb-1">Customer Message</span>
-                              <p className="text-sm text-gray-300 italic leading-relaxed">&ldquo;{selectedOrder.message || 'No instructions provided.'}&rdquo;</p>
-                           </div>
-                        </div>
-                     </div>
+                <AnimatePresence>
+                  {formData.serviceType === 'package' && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="space-y-2 overflow-hidden"
+                    >
+                       <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Select Package</label>
+                       <div className="relative">
+                          <PackageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/50" size={18} />
+                          <select 
+                            required={formData.serviceType === 'package'}
+                            value={formData.packageId}
+                            onChange={(e) => setFormData({...formData, packageId: e.target.value})}
+                            className="w-full bg-black border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all appearance-none"
+                          >
+                             <option value="" disabled>Choose a package...</option>
+                             {packages.map(p => (
+                               <option key={p._id} value={p._id}>{p.name} - LKR {p.price}</option>
+                             ))}
+                          </select>
+                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                     {/* Uploaded Image Preview */}
-                     <div className="space-y-4 pt-4 border-t border-white/5">
-                        <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest">Customer Upload</h4>
-                        {selectedOrder.uploadedImage ? (
-                           <div className="relative aspect-video rounded-2xl overflow-hidden glass border-white/10 group">
-                              <img src={selectedOrder.uploadedImage} className="w-full h-full object-cover" alt="Upload" />
-                              <a 
-                                 href={selectedOrder.uploadedImage} 
-                                 target="_blank" 
-                                 className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                              >
-                                 <span className="p-3 glass rounded-full text-white"><ExternalLink size={20} /></span>
-                              </a>
-                           </div>
-                        ) : (
-                           <div className="flex items-center gap-3 p-4 glass rounded-2xl border-dashed border-white/10 text-gray-600">
-                              <ImageIcon size={20} />
-                              <span className="text-xs font-bold uppercase tracking-widest">No photo attached</span>
-                           </div>
-                        )}
-                     </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Special Instructions</label>
+                    <div className="relative">
+                      <MessageSquare className="absolute left-4 top-4 text-primary/50" size={18} />
+                      <textarea 
+                        placeholder="Any specific requests for restoration?"
+                        value={formData.message}
+                        onChange={(e) => setFormData({...formData, message: e.target.value})}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all h-24 resize-none"
+                      />
+                    </div>
+                </div>
+              </div>
 
-                     {/* WhatsApp CTA */}
-                     <div className="pt-4 border-t border-white/5">
-                        <a 
-                           href={`https://wa.me/${selectedOrder.phone.replace(/[^0-9]/g, '')}`} 
-                           target="_blank"
-                           className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-[3px] hover:scale-105 transition-transform"
-                        >
-                           <Phone size={20} /> Contact on WhatsApp
-                        </a>
-                     </div>
-                  </div>
-               </GlassCard>
-            ) : (
-               <div className="text-center py-20 px-10 glass border-white/10 rounded-[30px] border-dashed">
-                  <ShoppingBag size={48} className="mx-auto text-gray-800 mb-6" />
-                  <p className="text-gray-600 text-xs font-black uppercase tracking-[3px]">Select an order to view full details and manage status</p>
-               </div>
-            )}
-         </div>
+              <button 
+                type="submit"
+                disabled={loading || uploading}
+                className="w-full btn-primary py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-neon flex items-center justify-center gap-3 disabled:opacity-50 disabled:grayscale transition-all hover:scale-[1.02]"
+              >
+                {loading ? <Loader2 className="animate-spin" size={20} /> : (
+                  <>
+                    Confirm Order <ArrowRight size={20} />
+                  </>
+                )}
+              </button>
+            </form>
+          </GlassCard>
+        </motion.div>
+
+        {/* Right Column: Image Upload Preview */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="lg:col-span-2 space-y-6"
+        >
+          <div className="space-y-4">
+             <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Photo to Restore</h3>
+             <div className="relative group">
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="imageUpload"
+                  disabled={uploading}
+                />
+                <label 
+                  htmlFor="imageUpload"
+                  className={`relative block aspect-[4/5] rounded-[40px] border-2 border-dashed transition-all cursor-pointer overflow-hidden group/upload ${imagePreview ? 'border-primary/50' : 'border-white/10 hover:border-primary/30 bg-white/5'}`}
+                >
+                  {imagePreview ? (
+                    <>
+                      <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/upload:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2">
+                        <Upload size={32} className="animate-bounce" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Change Photo</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 gap-4 p-8 text-center">
+                       <div className="w-20 h-20 rounded-full bg-white/5 border border-white/5 flex items-center justify-center group-hover/upload:scale-110 group-hover/upload:text-primary transition-all">
+                          <ImageIcon size={32} />
+                       </div>
+                       <div className="space-y-1">
+                          <span className="text-white font-bold text-sm block">Click to Upload</span>
+                          <span className="text-[10px] uppercase font-bold tracking-widest">JPG, PNG up to 10MB</span>
+                       </div>
+                    </div>
+                  )}
+
+                  {uploading && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center text-primary gap-3">
+                       <Loader2 className="animate-spin" size={40} />
+                       <span className="text-[10px] font-black uppercase tracking-[3px] animate-pulse">Uploading...</span>
+                    </div>
+                  )}
+                </label>
+
+                {formData.uploadedImage && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute -bottom-4 -right-4 w-12 h-12 bg-emerald-500 text-black rounded-full flex items-center justify-center shadow-neon border-4 border-black"
+                  >
+                    <CheckCircle2 size={24} />
+                  </motion.div>
+                )}
+             </div>
+          </div>
+
+          <GlassCard className="p-6 border-white/5 bg-white/[0.02] space-y-4">
+             <div className="flex items-center gap-3 text-primary">
+                <ShieldCheck size={18} />
+                <h4 className="font-bold text-sm text-white">Why Choose Mr. Photo?</h4>
+             </div>
+             <ul className="space-y-3">
+                {[
+                  'Professional Manual Restoration',
+                  'High-Resolution Digital Scan',
+                  'Premium Color Balancing',
+                  'Archival Grade Printing',
+                  '100% Satisfaction Guarantee'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-[10px] text-gray-400 font-medium italic">
+                    <Sparkles size={12} className="text-primary mt-0.5 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+             </ul>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
   );
+}
+
+export default function OrderPage() {
+  return (
+    <div className="pt-32 pb-20 px-6 min-h-screen">
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-96">
+          <Loader2 className="animate-spin text-primary" size={48} />
+        </div>
+      }>
+        <OrderFormContent />
+      </Suspense>
+    </div>
+  );
+}
+
+function ShieldCheck({ size, className }) {
+   return (
+     <svg 
+       width={size} 
+       height={size} 
+       viewBox="0 0 24 24" 
+       fill="none" 
+       stroke="currentColor" 
+       strokeWidth="2" 
+       strokeLinecap="round" 
+       strokeLinejoin="round" 
+       className={className}
+     >
+       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+       <path d="m9 12 2 2 4-4" />
+     </svg>
+   );
 }

@@ -5,13 +5,13 @@ const morgan = require('morgan');
 const path = require('path');
 const dotenv = require('dotenv');
 
-// Always load .env from the same folder as this file (backend/)
-dotenv.config({ path: path.join(__dirname, '.env') });
+// Load environment variables
+dotenv.config();
 
 // Crash early with a helpful message if critical env vars are missing
 if (!process.env.MONGODB_URI) {
   console.error('❌ FATAL: MONGODB_URI environment variable is not set!');
-  console.error('On Render: Go to your service → Environment tab → Add MONGODB_URI');
+  console.error('Check your Render Dashboard → Environment tab.');
   process.exit(1);
 }
 
@@ -27,12 +27,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
-app.use('/api/auth',      require('./routes/auth'));
-app.use('/api/products',  require('./routes/products'));
-app.use('/api/packages',  require('./routes/packages'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/packages', require('./routes/packages'));
 app.use('/api/portfolio', require('./routes/portfolio'));
-app.use('/api/reviews',   require('./routes/reviews'));
-app.use('/api/orders',    require('./routes/orders'));
+app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/orders', require('./routes/orders'));
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MR Photo API running 📸' }));

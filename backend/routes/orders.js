@@ -10,7 +10,7 @@ const router = express.Router();
 // @desc    Create a new order
 // @access  Public
 router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) => {
-  const { customerName, phone, address, serviceType, packageId, message } = req.body;
+  const { customerName, phone, address, serviceType, packageId, message, uploadedImage: bodyImage } = req.body;
 
   if (!customerName || !phone || !address || !serviceType) {
     res.status(400);
@@ -24,7 +24,7 @@ router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) =
     serviceType,
     packageId: packageId || undefined,
     message,
-    uploadedImage: req.file ? req.file.path : undefined
+    uploadedImage: req.file ? req.file.path : bodyImage
   });
 
   const createdOrder = await order.save();
