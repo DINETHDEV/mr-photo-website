@@ -49,7 +49,7 @@ export default function ProductsManagement() {
   const loadProducts = async () => {
     try {
       const data = await fetchAdminData('products/all');
-      setProducts(data || []);
+      setProducts(Array.isArray(data) ? data : []);
       setLoading(false);
     } catch (error) {
       toast.error("Failed to load services");
