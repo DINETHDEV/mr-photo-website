@@ -42,21 +42,28 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 group-hover:scale-110 transition-transform duration-500">
-             <img 
-               src="/images/logo.png" 
-               className="w-full h-full object-contain" 
-               alt="MR Photo Logo"
-               onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/100?text=MR+PHOTO";
-               }}
-             />
+          <div className="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
+             {/* Backdrop Glow */}
+             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
+             
+             {/* Premium Logo Container */}
+             <div className="relative glass p-1.5 rounded-[22px] border-white/10 group-hover:border-primary/40 group-hover:scale-105 transition-all duration-500 shadow-2xl overflow-hidden bg-white/5 backdrop-blur-3xl">
+                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <img 
+                  src="/images/logo.png" 
+                  className="w-full h-full object-contain rounded-xl" 
+                  alt="MR Photo"
+                  onError={(e) => {
+                     e.target.src = "https://via.placeholder.com/100?text=MR+PHOTO";
+                  }}
+                />
+             </div>
           </div>
           <div className="flex flex-col">
             <span className="text-xl md:text-2xl font-black tracking-tighter text-white leading-none uppercase italic">
               MR<span className="text-primary">.PHOTO</span>
             </span>
-            <span className="text-[7px] md:text-[8px] font-black text-gray-500 uppercase tracking-[3px] mt-1.5 opacity-80 leading-none">
+            <span className="text-[7px] md:text-[8px] font-black text-gray-500 uppercase tracking-[3.5px] mt-2 opacity-80 leading-none">
                Value For Every Customer
             </span>
           </div>

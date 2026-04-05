@@ -24,7 +24,7 @@ const CONTACT_INFO = [
   },
   {
     title: 'Visit Us',
-    value: 'Colombo, Sri Lanka',
+    value: 'Kalutara, Sri Lanka',
     icon: MapPin,
     link: 'https://maps.google.com',
     color: 'text-red-400',
@@ -68,7 +68,7 @@ export default function Contact() {
             <div className="absolute inset-0 bg-primary/20 blur-[150px] -z-10" />
             <GlassCard className="p-0 overflow-hidden h-[400px] md:h-[500px] border-primary/20 relative group">
                <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.5858597401!2d79.786164!3d6.9218374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1712140000000!5m2!1sen!2slk" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63435.53697960142!2d79.92383267929688!3d6.5854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2361099f66431%3A0xf69c0d9a6914ed0b!2sKalutara!5e0!3m2!1sen!2slk!4v1712140000000!5m2!1sen!2slk" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0, filter: 'invert(100%) hue-rotate(180deg) brightness(0.6)' }} 
@@ -84,7 +84,7 @@ export default function Contact() {
                     </div>
                     <div>
                        <h4 className="text-white font-bold text-lg leading-tight tracking-tight">Main Studio</h4>
-                       <p className="text-gray-400 text-xs uppercase tracking-widest font-black">Colombo, Sri Lanka</p>
+                       <p className="text-gray-400 text-xs uppercase tracking-widest font-black">Kalutara, Sri Lanka</p>
                     </div>
                  </div>
               </div>
