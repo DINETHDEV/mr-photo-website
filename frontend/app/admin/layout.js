@@ -28,36 +28,52 @@ const sidebarLinks = [
 ];
 
 export default function AdminLayout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // Sidebar closed by default — will open on desktop via useEffect
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
+  // ── Auth check ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const token = localStorage.getItem('token');
     const isLoginPage = pathname === '/admin/login';
 
     if (!token && !isLoginPage) {
-      // No token → redirect to login; keep spinner so no flash of content
       router.replace('/admin/login');
       return;
     }
-
     if (token && isLoginPage) {
-      // Already authenticated → go to dashboard; keep spinner
       router.replace('/admin');
       return;
     }
-
-    // Auth OK for current page — remove loading spinner
     setIsLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]); // intentionally omit 'router' — it is stable in Next.js 14 and including it causes re-run loops
+  }, [pathname]);
 
+  // ── Open sidebar by default on desktop, close on mobile ──────────────────
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarOpen(window.innerWidth >= 768);
+    };
+    // Set initial value
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // ── Auto-close sidebar on mobile when route changes ──────────────────────
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  }, [pathname]);
+
+  // ── Logout ───────────────────────────────────────────────────────────────
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('adminEmail');
-    toast.success("Logged out successfully");
+    toast.success('Logged out successfully');
     router.replace('/admin/login');
   };
 
@@ -69,48 +85,76 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  // Don't show sidebar on login page
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
   return (
-    <div className="flex min-h-screen bg-[#050505] text-white">
-      {/* Sidebar */}
-      <aside 
-        className={`fixed md:sticky top-0 left-0 h-screen z-40 transition-all duration-300 glass border-none rounded-none border-r border-white/5 bg-black/40 backdrop-blur-3xl ${
-          isSidebarOpen ? 'w-64' : 'w-20'
-        }`}
+    <div className="flex min-h-screen bg-[#050505] text-white relative">
+
+      {/* ── Mobile Backdrop Overlay ── */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* ── Sidebar ── */}
+      <aside
+        className={`fixed top-0 left-0 h-screen z-40 transition-all duration-300
+          glass border-r border-white/5 bg-black/70 backdrop-blur-3xl
+          ${isSidebarOpen ? 'w-64 translate-x-0' : 'w-64 -translate-x-full md:translate-x-0 md:w-20'}
+        `}
       >
         <div className="flex flex-col h-full py-8">
-          {/* Admin Brand */}
-          <div className="px-6 mb-12 flex items-center gap-4 overflow-hidden">
-             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-neon">
-               <Camera size={20} className="text-black" />
-             </div>
-             {isSidebarOpen && (
-                <span className="font-black text-xl tracking-tighter transition-all">
-                   ADMIN<span className="text-primary">.PANEL</span>
-                </span>
-             )}
+
+          {/* Brand + Close button on mobile */}
+          <div className="px-5 mb-10 flex items-center justify-between gap-4 overflow-hidden">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-neon">
+                <Camera size={20} className="text-black" />
+              </div>
+              <span className={`font-black text-lg tracking-tighter transition-all whitespace-nowrap overflow-hidden ${isSidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'}`}>
+                ADMIN<span className="text-primary">.PANEL</span>
+              </span>
+            </div>
+            {/* Close button visible only on mobile when open */}
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="md:hidden p-1.5 glass rounded-lg text-gray-500 hover:text-white transition-colors shrink-0"
+            >
+              <X size={18} />
+            </button>
           </div>
 
-          {/* Links */}
-          <nav className="flex-grow space-y-2 px-3">
+          {/* Nav Links */}
+          <nav className="flex-grow space-y-1.5 px-3">
             {sidebarLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
+                  onClick={() => {
+                    // Close sidebar on mobile after clicking a link
+                    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                      setIsSidebarOpen(false);
+                    }
+                  }}
                   className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all group overflow-hidden ${
-                    isActive 
-                      ? 'bg-primary text-black font-black shadow-neon' 
+                    isActive
+                      ? 'bg-primary text-black font-black shadow-neon'
                       : 'text-gray-400 hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  <link.icon size={22} className={isActive ? 'text-black' : 'group-hover:text-primary transition-colors'} />
-                  {isSidebarOpen && <span className="text-sm tracking-wide">{link.name}</span>}
+                  <link.icon
+                    size={22}
+                    className={`shrink-0 ${isActive ? 'text-black' : 'group-hover:text-primary transition-colors'}`}
+                  />
+                  <span className={`text-sm tracking-wide whitespace-nowrap overflow-hidden transition-all ${isSidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0 md:hidden'}`}>
+                    {link.name}
+                  </span>
                 </Link>
               );
             })}
@@ -119,44 +163,52 @@ export default function AdminLayout({ children }) {
           {/* Logout */}
           <div className="px-3 pt-6 border-t border-white/5 mt-auto">
             <button
-               onClick={handleLogout}
-               className="flex items-center gap-4 w-full px-4 py-3.5 rounded-xl text-red-500 hover:bg-red-500/10 transition-all group overflow-hidden"
+              onClick={handleLogout}
+              className="flex items-center gap-4 w-full px-4 py-3.5 rounded-xl text-red-500 hover:bg-red-500/10 transition-all group overflow-hidden"
             >
-              <LogOut size={22} className="group-hover:translate-x-1 transition-transform" />
-              {isSidebarOpen && <span className="text-sm font-bold tracking-widest uppercase">Sign Out</span>}
+              <LogOut size={22} className="shrink-0 group-hover:translate-x-1 transition-transform" />
+              <span className={`text-sm font-bold tracking-widest uppercase whitespace-nowrap overflow-hidden transition-all ${isSidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0 md:hidden'}`}>
+                Sign Out
+              </span>
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-grow p-6 md:p-10 relative">
-         <header className="flex justify-between items-center mb-10 md:mb-16">
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-3 glass rounded-xl text-gray-400 hover:text-primary hover:border-primary/40 transition-all"
-            >
-              {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-            <div className="flex items-center gap-4">
-               <Link href="/" className="text-[10px] text-gray-500 hover:text-white font-bold uppercase tracking-widest border-r border-white/10 pr-4 transition-all">
-                  Visit Main Site
-               </Link>
-               <div className="flex items-center gap-3 glass py-1.5 pl-1.5 pr-4 rounded-full border-white/10 group cursor-pointer hover:border-primary/20">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-orange-600 flex items-center justify-center font-black text-black text-xs uppercase">
-                     MP
-                  </div>
-                  <span className="text-xs font-bold text-gray-300 transition-colors">Admin MR Photo</span>
-               </div>
-            </div>
-         </header>
+      {/* ── Main Content ── */}
+      <main className="flex-grow min-w-0 p-5 md:p-10 md:ml-20 relative">
+        <header className="flex justify-between items-center mb-10 md:mb-14">
+          {/* Hamburger — always visible */}
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-3 glass rounded-xl text-gray-400 hover:text-primary hover:border-primary/40 transition-all shrink-0"
+            aria-label="Toggle sidebar"
+          >
+            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
 
-         {/* Content Wrapper */}
-         <div className="max-w-6xl">
-            <Suspense fallback={<Loader2 className="animate-spin text-primary m-auto" size={32} />}>
-               {children}
-            </Suspense>
-         </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-[10px] text-gray-500 hover:text-white font-bold uppercase tracking-widest border-r border-white/10 pr-4 transition-all hidden sm:block"
+            >
+              Visit Main Site
+            </Link>
+            <div className="flex items-center gap-2 glass py-1.5 pl-1.5 pr-3 rounded-full border-white/10">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-orange-600 flex items-center justify-center font-black text-black text-xs uppercase shrink-0">
+                MP
+              </div>
+              <span className="text-xs font-bold text-gray-300 hidden sm:block">Admin MR Photo</span>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="max-w-6xl">
+          <Suspense fallback={<Loader2 className="animate-spin text-primary m-auto" size={32} />}>
+            {children}
+          </Suspense>
+        </div>
       </main>
     </div>
   );
