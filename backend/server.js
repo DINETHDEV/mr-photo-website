@@ -8,6 +8,14 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config(); 
 
+// Hardcoded Environment Variables for running without .env file
+process.env.PORT = process.env.PORT || '5000';
+process.env.MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://mrphoto:mrphoto@mrphoto.okk1btr.mongodb.net/mrphoto_db?appName=mrphoto';
+process.env.JWT_SECRET = process.env.JWT_SECRET || '8f4a2b9c7d3e6f1a8b4c2d9e7f1a3b5c8d4e2f6a1b9c7d3e6f1a8b4c2d9e7f1a';
+process.env.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'dguist2qh';
+process.env.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || '723523384242947';
+process.env.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || '0iMqDLkVPhDpVcalBiSMqZSHSBM';
+
 // --- DIAGNOSTIC LOGGING ---
 console.log('🔍 [DIAGNOSTIC] Environment Check:');
 console.log(' - MONGODB_URI:', process.env.MONGODB_URI ? '✅ SET' : '❌ MISSING');
