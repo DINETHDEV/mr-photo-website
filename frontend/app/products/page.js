@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
@@ -18,7 +18,7 @@ import Link from 'next/link';
 import GlassCard from '@/components/GlassCard';
 import { fetchData } from '@/utils/api';
 
-export default function ProductDetail() {
+function ProductDetailContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const router = useRouter();
@@ -171,5 +171,17 @@ export default function ProductDetail() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function ProductDetail() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="animate-spin text-primary" size={48} />
+      </div>
+    }>
+      <ProductDetailContent />
+    </Suspense>
   );
 }
