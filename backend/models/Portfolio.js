@@ -11,15 +11,18 @@ const portfolioSchema = new mongoose.Schema({
     required: true, // e.g., 'restoration', 'design', 'frames'
     trim: true
   },
-  beforeImage: {
-    type: String, // Cloudinary URL format required for comparison slider
+  image: {
+    type: String, // Main masterpiece image
     required: true
   },
+  beforeImage: {
+    type: String, // Deprecated
+  },
   afterImage: {
-    type: String, // Cloudinary URL
+    type: String, // Deprecated
   },
   isBeforeAfter: {
-    type: Boolean,
+    type: Boolean, // Deprecated
     default: false
   }
 }, { timestamps: true });

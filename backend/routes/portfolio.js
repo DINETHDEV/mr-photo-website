@@ -17,26 +17,22 @@ router.get('/', asyncHandler(async (req, res) => {
 // @route   POST /api/portfolio
 // @desc    Create a portfolio item
 // @access  Private/Admin
-router.post('/', protect, admin, upload.fields([
-  { name: 'beforeImage', maxCount: 1 },
-  { name: 'afterImage', maxCount: 1 }
-]), asyncHandler(async (req, res) => {
-  const { title, category, isBeforeAfter } = req.body;
+router.post('/', protect, admin, upload.single('image'), asyncHandler(async (req, res) => {
+  const { title, category } = req.body;
   
-  if (!req.files || !req.files['beforeImage']) {
+  if (!req.file) {
     res.status(400);
-    throw new Error('Before image is required');
+    throw new Error('Image is required');
   }
 
-  const beforeImage = req.files['beforeImage'][0].path;
-  const afterImage = req.files['afterImage'] ? req.files['afterImage'][0].path : undefined;
+  const image = req.file.path;
 
   const newItem = new Portfolio({
     title,
     category,
-    beforeImage,
-    afterImage,
-    isBeforeAfter: isBeforeAfter === 'true' || isBeforeAfter === true
+    image,
+    beforeImage: image, // Fallback for old code
+    isBeforeAfter: false
   });
 
   const createdItem = await newItem.save();

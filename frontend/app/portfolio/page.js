@@ -112,7 +112,7 @@ export default function Portfolio() {
                   <GlassCard className="p-0 h-full flex flex-col group overflow-hidden border-white/5 hover:border-primary/30 transition-all duration-500">
                     <div className="relative aspect-[4/5] overflow-hidden bg-black/40">
                       <img 
-                        src={item.afterImage || item.image || item.beforeImage} 
+                        src={item.image || item.afterImage || item.beforeImage} 
                         alt={item.title}
                         className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" 
                       />
