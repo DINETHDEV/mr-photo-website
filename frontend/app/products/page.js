@@ -123,13 +123,36 @@ function ProductDetailContent() {
             </div>
           </div>
 
-          <div className="glass p-8 rounded-[30px] border-white/5 bg-white/[0.02]">
-            <h3 className="text-white font-bold mb-4 flex items-center gap-2 italic">
-               <Info size={18} className="text-primary" /> Service Description
-            </h3>
-            <p className="text-gray-400 leading-relaxed text-lg">
-               {product.description || `Enhance your memories with our ${product.name} service. We prioritize quality and precision to ensure every pixel tells your story perfectly.`}
-            </p>
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-orange-600/30 rounded-[30px] blur opacity-25 group-hover:opacity-40 transition-opacity" />
+            <div className="relative glass p-10 rounded-[30px] border-white/10 bg-white/[0.02] backdrop-blur-xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <h3 className="text-white text-2xl font-black flex items-center gap-3 tracking-tighter uppercase italic">
+                  <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Info size={20} className="text-primary" />
+                  </span>
+                  Service <span className="text-primary">Description</span>
+                </h3>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[2px]">
+                  <CheckCircle2 size={12} /> Professional Quality
+                </div>
+              </div>
+              <div className="space-y-6">
+                <p className="text-gray-300 leading-relaxed text-lg font-medium opacity-90">
+                  {product.description || `Enhance your memories with our ${product.name} service. We prioritize quality and precision to ensure every pixel tells your story perfectly. Our team of professionals treats every project with extreme care and dedication.`}
+                </p>
+                <div className="flex items-center gap-6 pt-6 border-t border-white/5">
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-primary/20 flex items-center justify-center">
+                        <ImageIcon size={12} className="text-primary" />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Trusted by 10k+ clients</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
