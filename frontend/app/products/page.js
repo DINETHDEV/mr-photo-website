@@ -12,7 +12,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Zap,
-  Star
+  Star,
+  Palette
 } from 'lucide-react';
 import Link from 'next/link';
 import GlassCard from '@/components/GlassCard';
@@ -161,6 +162,31 @@ function ProductDetailContent() {
                    <span className="text-xs text-gray-300 font-black uppercase tracking-widest">{f}</span>
                 </div>
              ))}
+          </div>
+
+          <div className="glass p-6 rounded-[24px] border-white/5 mt-2">
+            <h4 className="text-white text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Palette size={14} className="text-primary" /> Available Frame Colors
+            </h4>
+            <div className="flex flex-wrap gap-3 mb-4">
+              {[
+                { name: 'Black', color: '#0a0a0a', border: 'border-white/20', extra: null },
+                { name: 'White', color: '#f5f5f5', border: 'border-black/20', extra: null },
+                { name: 'Brown', color: '#7c4a1e', border: 'border-amber-800/30', extra: '+ Rs. 300' }
+              ].map((frame, idx) => (
+                <div key={idx} className={`flex items-center gap-3 pr-4 p-1.5 rounded-full border transition-all ${frame.extra ? 'bg-amber-950/30 border-amber-600/30 hover:border-amber-500/60' : 'bg-white/5 border-white/5 hover:border-primary/30'}`}>
+                  <div className={`w-6 h-6 rounded-full shadow-inner border-2 ${frame.border} shrink-0`} style={{ backgroundColor: frame.color }}></div>
+                  <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider">{frame.name}</span>
+                  {frame.extra && (
+                    <span className="text-[9px] font-black text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">{frame.extra}</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-[9px] text-gray-500 font-medium italic flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block shrink-0"></span>
+              Custom frame colors available on request — contact us for your preferred shade.
+            </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
