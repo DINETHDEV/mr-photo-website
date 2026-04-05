@@ -6,21 +6,23 @@ export default function Footer() {
     <footer className="mt-20 border-t border-white/10 glass py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand Section */}
-        <div className="space-y-4">
-          <Link href="/" className="flex items-center gap-3">
-             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-neon">
-               <Camera className="text-black w-6 h-6" />
+        <div className="space-y-6">
+          <Link href="/" className="flex items-center gap-4">
+             <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center p-1 border border-white/10 hover:border-primary/30 transition-all">
+               <img src="/images/logo.png" className="w-full h-full object-contain" alt="MR Photo" />
              </div>
              <span className="text-2xl font-black tracking-tighter text-white">
-               MR<span className="text-primary italic">.PHOTO</span>
+               MR<span className="text-primary">.PHOTO</span>
              </span>
           </Link>
-          <p className="text-gray-400 text-sm italic">
-            &ldquo;Value For Every Customer&rdquo;
-          </p>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            Premium photo restoration, design, and printing services. We bring your memories back to life with state-of-the-art technology.
-          </p>
+          <div className="space-y-4">
+            <p className="text-primary text-[10px] font-black uppercase tracking-[4px] italic">
+              &ldquo;Value For Every Customer&rdquo;
+            </p>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
+              Premium photo restoration, design, and printing services. We bring your memories back to life with state-of-the-art technology.
+            </p>
+          </div>
         </div>
 
         {/* Quick Links */}

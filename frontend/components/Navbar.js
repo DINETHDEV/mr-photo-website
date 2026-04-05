@@ -41,13 +41,25 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-neon group-hover:scale-110 transition-transform">
-            <Camera className="text-black w-6 h-6" />
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="relative w-12 h-12 sm:w-14 sm:h-14 group-hover:scale-110 transition-transform duration-500">
+             <img 
+               src="/images/logo.png" 
+               className="w-full h-full object-contain" 
+               alt="MR Photo Logo"
+               onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/100?text=MR+PHOTO";
+               }}
+             />
           </div>
-          <span className="text-xl md:text-2xl font-black tracking-tighter text-white">
-            MR<span className="text-primary italic">.PHOTO</span>
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xl md:text-2xl font-black tracking-tighter text-white leading-none uppercase italic">
+              MR<span className="text-primary">.PHOTO</span>
+            </span>
+            <span className="text-[7px] md:text-[8px] font-black text-gray-500 uppercase tracking-[3px] mt-1.5 opacity-80 leading-none">
+               Value For Every Customer
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav Items */}
