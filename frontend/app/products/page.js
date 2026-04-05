@@ -116,7 +116,7 @@ function ProductDetailContent() {
         >
           <div className="space-y-4">
             <span className="text-primary text-[10px] font-black uppercase tracking-[6px] block">{product.category}</span>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">{product.name}</h1>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">{product.name}</h1>
             <div className="flex flex-wrap items-center gap-6 pt-4">
                <div className="text-4xl md:text-5xl font-black text-primary tracking-tighter">LKR {product.price?.toLocaleString()}</div>
                <div className="glass px-4 py-1.5 rounded-xl border-white/10 text-gray-500 text-[10px] uppercase font-black tracking-widest">Base Rate</div>
