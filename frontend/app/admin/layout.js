@@ -176,7 +176,7 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* ── Main Content ── */}
-      <main className="flex-grow min-w-0 p-5 md:p-10 md:ml-20 relative">
+      <main className={`flex-grow min-w-0 p-5 md:p-10 relative transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'}`}>
         <header className="flex justify-between items-center mb-10 md:mb-14">
           {/* Hamburger — always visible */}
           <button
