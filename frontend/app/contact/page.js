@@ -33,9 +33,7 @@ const CONTACT_INFO = [
 ];
 
 const WORKING_HOURS = [
-  { day: 'Monday - Friday', hours: '9:00 AM - 7:00 PM' },
-  { day: 'Saturday', hours: '10:00 AM - 5:00 PM' },
-  { day: 'Sunday', hours: 'Closed' },
+  { day: 'Every Day', hours: '8:00 AM – 9:00 PM' },
 ];
 
 export default function Contact() {
