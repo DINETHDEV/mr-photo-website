@@ -70,4 +70,19 @@ router.put('/:id/status', protect, admin, asyncHandler(async (req, res) => {
   }
 }));
 
+// @route   DELETE /api/orders/:id
+// @desc    Delete an order
+// @access  Private/Admin
+router.delete('/:id', protect, admin, asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    await order.deleteOne();
+    res.json({ message: 'Order removed successfully' });
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+}));
+
 module.exports = router;
