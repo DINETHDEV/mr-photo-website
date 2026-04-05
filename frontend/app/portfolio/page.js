@@ -9,62 +9,7 @@ import { fetchData } from '@/utils/api';
 
 const categories = ['All', 'Restoration', 'Design', 'Frames', 'Printing'];
 
-// Mock Work Data
-const mockPortfolio = [
-  {
-    _id: '1',
-    title: 'Vintage Portrait Restoration',
-    category: 'Restoration',
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800',
-  },
-  {
-    _id: '2',
-    title: 'Modern Abstract Frame',
-    category: 'Frames',
-    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=800',
-  },
-  {
-    _id: '3',
-    title: 'Family Reunion Edit',
-    category: 'Design',
-    image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&q=80&w=800',
-  },
-  {
-    _id: '4',
-    title: 'Canvas Print - Nature',
-    category: 'Printing',
-    image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&q=80&w=800',
-  },
-];
-
-// Mock Reviews
-const mockReviews = [
-  {
-    _id: 'r1',
-    name: 'Sampath Perera',
-    role: 'Verified Customer',
-    rating: 5,
-    comment: 'The restoration of my grandfather’s 40-year-old wedding photo is absolutely incredible. The detail is mind-blowing. Thank you Mr. Photo!',
-    date: '2024-03-10'
-  },
-  {
-    _id: 'r2',
-    name: 'Dilrukshi Silva',
-    role: 'Verified Customer',
-    rating: 5,
-    comment: 'Excellent service and high-quality frames. The colors are so vibrant. Will definitely order again!',
-    date: '2024-03-22'
-  },
-  {
-    _id: 'r3',
-    name: 'Nuwan Jayasinghe',
-    role: 'Product Designer',
-    rating: 5,
-    comment: 'Professional retouching and very fast delivery. Recommended for anyone looking for premium photo services in Kalutara.',
-    date: '2024-04-01'
-  }
-];
-
+// Work with real data only
 export default function Portfolio() {
   const [items, setItems] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -80,16 +25,14 @@ export default function Portfolio() {
           fetchData('reviews')
         ]);
         
-        const finalPortfolio = portfolioData && portfolioData.length > 0 ? portfolioData : mockPortfolio;
-        const finalReviews = reviewsData && reviewsData.length > 0 ? reviewsData : mockReviews;
-        
-        setItems(finalPortfolio);
-        setFilteredItems(finalPortfolio);
-        setReviews(finalReviews);
+        setItems(portfolioData || []);
+        setFilteredItems(portfolioData || []);
+        setReviews(reviewsData || []);
       } catch (error) {
-        setItems(mockPortfolio);
-        setFilteredItems(mockPortfolio);
-        setReviews(mockReviews);
+        console.error("Failed to load work data");
+        setItems([]);
+        setFilteredItems([]);
+        setReviews([]);
       } finally {
         setLoading(false);
       }

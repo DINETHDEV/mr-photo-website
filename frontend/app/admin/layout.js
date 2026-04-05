@@ -23,7 +23,7 @@ const sidebarLinks = [
   { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
   { name: 'Services/Products', href: '/admin/products', icon: Briefcase },
   { name: 'Gift Packages', href: '/admin/packages', icon: Package },
-  { name: 'Portfolio', href: '/admin/portfolio', icon: ImageIcon },
+  { name: 'Previous Work', href: '/admin/portfolio', icon: ImageIcon },
   { name: 'Reviews', href: '/admin/reviews', icon: Star },
 ];
 
