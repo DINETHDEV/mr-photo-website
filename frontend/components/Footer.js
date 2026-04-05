@@ -65,15 +65,15 @@ export default function Footer() {
         {/* Social & Newsletter */}
         <div>
           <h4 className="text-white font-bold mb-6 text-lg">Follow Us</h4>
-          <div className="flex gap-4 mb-8">
-            <Link href="https://facebook.com" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-primary/20 hover:text-primary transition-all">
+          <div className="flex gap-4">
+            <Link href="https://web.facebook.com/profile.php?id=100064042300162" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-blue-600/20 hover:text-blue-500 transition-all border border-white/5 hover:border-blue-600/30">
               <Facebook size={20} />
             </Link>
-            <Link href="https://instagram.com" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-primary/20 hover:text-primary transition-all">
+            <Link href="https://instagram.com" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-pink-600/20 hover:text-pink-500 transition-all border border-white/5 hover:border-pink-600/30">
               <Instagram size={20} />
             </Link>
-            <Link href="https://twitter.com" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-primary/20 hover:text-primary transition-all">
-              <Twitter size={20} />
+            <Link href="https://wa.me/94777061718" className="w-10 h-10 glass flex items-center justify-center rounded-lg hover:bg-emerald-600/20 hover:text-emerald-500 transition-all border border-white/5 hover:border-emerald-600/30">
+              <Phone size={20} />
             </Link>
           </div>
         </div>

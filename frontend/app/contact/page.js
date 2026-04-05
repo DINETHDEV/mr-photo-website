@@ -136,26 +136,26 @@ export default function Contact() {
                <h2>Social Connect</h2>
             </div>
             <div className="grid grid-cols-2 gap-4">
-               <Link href="https://facebook.com" className="group">
+               <Link href="https://web.facebook.com/profile.php?id=100064042300162" className="group">
                   <GlassCard className="p-6 text-center border-white/5 group-hover:bg-blue-600/10 group-hover:border-blue-600/40 transition-all">
                      <Facebook size={32} className="mx-auto mb-4 text-blue-600 group-hover:scale-110 transition-transform" />
                      <span className="block text-white font-bold text-sm">Facebook</span>
                      <span className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mt-1">/mrphoto.lk</span>
                   </GlassCard>
                </Link>
-               <Link href="https://instagram.com" className="group">
-                  <GlassCard className="p-6 text-center border-white/5 group-hover:bg-pink-600/10 group-hover:border-pink-600/40 transition-all">
-                     <Instagram size={32} className="mx-auto mb-4 text-pink-600 group-hover:scale-110 transition-transform" />
-                     <span className="block text-white font-bold text-sm">Instagram</span>
-                     <span className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mt-1">@mrphoto.studio</span>
+               <Link href="https://wa.me/94777061718" className="group">
+                  <GlassCard className="p-6 text-center border-white/5 group-hover:bg-emerald-600/10 group-hover:border-emerald-600/40 transition-all">
+                     <MessageCircle size={32} className="mx-auto mb-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+                     <span className="block text-white font-bold text-sm">WhatsApp</span>
+                     <span className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mt-1">Chat Now</span>
                   </GlassCard>
                </Link>
             </div>
             <div className="mt-4">
-              <Link href="https://twitter.com" className="group">
-                  <GlassCard className="p-6 flex items-center justify-center gap-4 border-white/5 group-hover:bg-sky-400/10 group-hover:border-sky-400/40 transition-all">
-                     <Twitter size={24} className="text-sky-400" />
-                     <span className="text-white font-bold">Follow our latest work on Twitter</span>
+              <Link href="https://instagram.com" className="group">
+                  <GlassCard className="p-6 flex items-center justify-center gap-4 border-white/5 group-hover:bg-pink-600/10 group-hover:border-pink-600/40 transition-all">
+                     <Instagram size={24} className="text-pink-600" />
+                     <span className="text-white font-bold">Follow our latest work on Instagram</span>
                      <ChevronRight size={18} className="text-gray-600 group-hover:translate-x-1 transition-transform" />
                   </GlassCard>
                </Link>
