@@ -15,7 +15,8 @@ export const fetchAdminData = async (endpoint) => {
     });
     if (response.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '/admin/login';
+      // Use replace so the invalid session doesn't sit in browser history
+      window.location.replace('/admin/login');
       return null;
     }
     return await response.json();

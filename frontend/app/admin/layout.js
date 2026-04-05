@@ -34,24 +34,31 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Basic Auth Check
     const token = localStorage.getItem('token');
     const isLoginPage = pathname === '/admin/login';
 
     if (!token && !isLoginPage) {
-      router.push('/admin/login');
-    } else if (token && isLoginPage) {
-      router.push('/admin');
+      // No token → redirect to login; keep spinner so no flash of content
+      router.replace('/admin/login');
+      return;
     }
-    
+
+    if (token && isLoginPage) {
+      // Already authenticated → go to dashboard; keep spinner
+      router.replace('/admin');
+      return;
+    }
+
+    // Auth OK for current page — remove loading spinner
     setIsLoading(false);
-  }, [pathname, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]); // intentionally omit 'router' — it is stable in Next.js 14 and including it causes re-run loops
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('adminEmail');
     toast.success("Logged out successfully");
-    router.push('/admin/login');
+    router.replace('/admin/login');
   };
 
   if (isLoading) {

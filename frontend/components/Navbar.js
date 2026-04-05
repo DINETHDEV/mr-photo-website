@@ -76,15 +76,17 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               className={`text-sm font-bold tracking-widest uppercase transition-all hover:text-primary ${
-                pathname === link.href ? 'text-primary' : 'text-gray-400'
+                link.href === '/'
+                  ? pathname === '/' ? 'text-primary' : 'text-gray-400'
+                  : pathname.startsWith(link.href) ? 'text-primary' : 'text-gray-400'
               }`}
             >
               {link.name}
             </Link>
           ))}
-          <Link href="/admin">
-             <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center hover:border-primary transition-colors">
-               <User className="w-4 h-4 text-gray-500 hover:text-primary transition-colors cursor-pointer" />
+          <Link href="/admin" prefetch={false} aria-label="Admin Panel">
+             <div className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center hover:border-primary hover:bg-primary/10 transition-all cursor-pointer">
+               <User className="w-4 h-4 text-gray-500 hover:text-primary transition-colors" />
              </div>
           </Link>
         </div>
