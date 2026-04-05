@@ -94,8 +94,11 @@ export default function Home() {
           
           <motion.div 
             initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 1 }}
+            animate={{ opacity: 1, scale: 1, rotateY: 0, y: [0, -10, 0] }}
+            transition={{ 
+               duration: 1,
+               y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
+            }}
             className="hidden sm:block lg:perspective-1000"
           >
             <div className="relative glass border-primary/10 rounded-[40px] p-6 lg:p-10 overflow-hidden lg:transform-style-3d group">
@@ -139,15 +142,23 @@ export default function Home() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((f, i) => (
-              <GlassCard key={i} className="group hover:border-primary/30 transition-all border-white/5 p-8 flex flex-col gap-6">
-                <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${f.color}`}>
-                  <f.icon size={28} />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{f.title}</h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
-                </div>
-              </GlassCard>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <GlassCard className="group hover:border-primary/30 transition-all border-white/5 p-8 flex flex-col gap-6 h-full">
+                  <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${f.color}`}>
+                    <f.icon size={28} />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{f.title}</h4>
+                    <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                  </div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -155,7 +166,13 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 px-6 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto glass p-10 sm:p-12 md:p-20 rounded-[40px] sm:rounded-[50px] border-primary/20 relative z-10 text-center space-y-8 overflow-hidden group">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto glass p-10 sm:p-12 md:p-20 rounded-[40px] sm:rounded-[50px] border-primary/20 relative z-10 text-center space-y-8 overflow-hidden group"
+        >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none tracking-tighter uppercase">READY TO BRING <br /> MEMORIES TO <span className="text-primary italic underline decoration-primary/20 underline-offset-8">LIFE?</span></h2>
@@ -170,7 +187,7 @@ export default function Home() {
                   Let&apos;s Talk
                </Link>
             </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
