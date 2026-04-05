@@ -59,10 +59,10 @@ export default function Portfolio() {
         <div className="flex flex-col md:flex-row justify-between items-end gap-8">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-primary/20 text-primary text-[10px] font-black uppercase tracking-[4px]">
-              <Briefcase size={14} /> Masterpieces
+              <Briefcase size={14} /> Our Projects
             </div>
             <h1 className="text-4xl md:text-7xl font-black text-white italic tracking-tighter uppercase leading-none">
-              Previous <span className="text-primary underline underline-offset-[12px] decoration-primary/20">Work</span>
+              Previous <span className="text-primary underline underline-offset-[12px] decoration-primary/20">Projects</span>
             </h1>
             <p className="text-gray-400 text-lg max-w-xl italic">
               Explore our gallery of professional restorations, custom designs, and premium framing projects.

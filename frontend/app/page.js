@@ -72,7 +72,7 @@ export default function Home() {
                 Explore Services <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/portfolio" className="glass hover:bg-white/5 transition-all text-white px-8 py-5 rounded-2xl font-bold border border-white/10 flex items-center justify-center gap-2 w-full sm:w-auto">
-                View Portfolio
+                Previous Projects
               </Link>
             </div>
 

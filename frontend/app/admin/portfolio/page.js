@@ -110,7 +110,7 @@ export default function PortfolioManagement() {
          <div>
             <h1 className="text-3xl font-black text-white flex items-center gap-3">
                <ImageIcon className="text-primary" size={32} /> 
-               Previous Work <span className="text-primary italic">Gallery</span>
+               Previous Projects <span className="text-primary italic">Gallery</span>
             </h1>
             <p className="text-gray-500 text-sm mt-1">Manage your studio&apos;s showcased work and masterpiece gallery.</p>
          </div>

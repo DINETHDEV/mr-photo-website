@@ -22,7 +22,7 @@ import toast from 'react-hot-toast';
 import GlassCard from '@/components/GlassCard';
 import { fetchAdminData, postAdminData, putAdminData, deleteAdminData } from '@/utils/adminApi';
 
-const categories = ['restoration', 'design', 'frames', 'printing', 'laminating'];
+const categories = ['restoration', 'design', 'frames', 'printing', 'laminating', 'frame only', 'full package'];
 
 export default function ProductsManagement() {
   const [products, setProducts] = useState([]);

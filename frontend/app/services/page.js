@@ -12,7 +12,8 @@ import {
   Printer, 
   Loader2, 
   ArrowRight,
-  Phone
+  Phone,
+  Package
 } from 'lucide-react';
 import Link from 'next/link';
 import GlassCard from '@/components/GlassCard';
@@ -23,6 +24,8 @@ const categoryIcons = {
   'design': ImageIcon,
   'printing': Printer,
   'frame': Ruler,
+  'frame only': Ruler,
+  'full package': Package,
   'laminating': Info,
   'default': Briefcase
 };
@@ -32,6 +35,8 @@ const categoryColors = {
   'design': 'text-purple-400',
   'printing': 'text-orange-400',
   'frame': 'text-emerald-400',
+  'frame only': 'text-emerald-400',
+  'full package': 'text-primary',
   'default': 'text-primary'
 };
 
