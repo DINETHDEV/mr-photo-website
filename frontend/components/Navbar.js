@@ -35,17 +35,17 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'py-4 glass-card border-none rounded-none border-b border-white/5' : 'py-6 bg-transparent'
+      className={`fixed w-full z-50 transition-all duration-500 ${
+        scrolled ? 'py-3 glass-card border-none rounded-none border-b border-white/5 bg-black/60 shadow-2xl' : 'py-6 bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-neon">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-neon group-hover:scale-110 transition-transform">
             <Camera className="text-black w-6 h-6" />
           </div>
-          <span className="text-2xl font-black tracking-tighter text-white">
+          <span className="text-xl md:text-2xl font-black tracking-tighter text-white">
             MR<span className="text-primary italic">.PHOTO</span>
           </span>
         </Link>
@@ -56,21 +56,26 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`text-sm font-medium tracking-wide transition-all hover:text-primary ${
-                pathname === link.href ? 'text-primary' : 'text-gray-300'
+              className={`text-sm font-bold tracking-widest uppercase transition-all hover:text-primary ${
+                pathname === link.href ? 'text-primary' : 'text-gray-400'
               }`}
             >
               {link.name}
             </Link>
           ))}
           <Link href="/admin">
-             <User className="w-5 h-5 text-gray-500 hover:text-primary transition-colors cursor-pointer" />
+             <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center hover:border-primary transition-colors">
+               <User className="w-4 h-4 text-gray-500 hover:text-primary transition-colors cursor-pointer" />
+             </div>
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        <button 
+          className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl glass border-white/10 text-white" 
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -78,23 +83,54 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="md:hidden absolute top-full left-0 w-full glass shadow-2xl p-6 flex flex-col gap-4 border-t border-white/10"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="md:hidden absolute top-full left-0 w-full glass-card border-none rounded-none border-t border-white/10 shadow-2xl p-8 flex flex-col gap-2 min-h-[60vh] bg-black/90 backdrop-blur-3xl overflow-y-auto"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`flex items-center gap-4 text-lg p-3 rounded-lg transition-all ${
-                  pathname === link.href ? 'bg-primary/20 text-primary border border-primary/20' : 'text-gray-300 hover:bg-white/5'
-                }`}
-              >
-                <link.icon size={22} />
-                {link.name}
-              </Link>
-            ))}
+            <div className="text-[10px] font-black text-primary uppercase tracking-[5px] mb-4 opacity-50">Navigation</div>
+            <div className="grid grid-cols-1 gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
+                    pathname === link.href 
+                      ? 'bg-primary/10 text-primary border-l-4 border-primary' 
+                      : 'text-gray-300 hover:bg-white/5 border-l-4 border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <link.icon size={20} className={pathname === link.href ? 'text-primary' : 'text-gray-500'} />
+                    <span className="text-lg font-black tracking-tight uppercase italic">{link.name}</span>
+                  </div>
+                  <motion.div
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                  >
+                    <X size={14} className="rotate-45 text-primary/30" />
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-white/5">
+              <div className="text-[10px] font-black text-primary uppercase tracking-[5px] mb-6 opacity-50">Connect with us</div>
+              <div className="grid grid-cols-2 gap-4">
+                 <Link href="/contact" className="glass p-4 rounded-2xl flex flex-col items-center gap-2 border-white/5 hover:border-primary/20 transition-all">
+                    <Mail size={20} className="text-primary" />
+                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-500">Email</span>
+                 </Link>
+                 <Link href="/admin" className="glass p-4 rounded-2xl flex flex-col items-center gap-2 border-white/5 hover:border-primary/20 transition-all">
+                    <User size={20} className="text-primary" />
+                    <span className="text-[8px] font-black uppercase tracking-widest text-gray-500">Admin</span>
+                 </Link>
+              </div>
+            </div>
+            
+            <div className="mt-auto pt-10 text-center">
+               <p className="text-[8px] text-gray-600 font-black uppercase tracking-[3px]">MR Photo &copy; {new Date().getFullYear()}</p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

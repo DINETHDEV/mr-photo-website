@@ -60,7 +60,7 @@ export default function Packages() {
               </div>
 
               <h3 className="text-2xl font-black text-white mb-2">{pkg.name}</h3>
-              <p className="text-gray-500 text-sm italic mb-6 leading-relaxed">&ldquo;{pkg.description || 'Exclusive gift collection from Mr. Photo.'}&rdquo;</p>
+              <p className="text-gray-500 text-sm italic mb-6 leading-relaxed whitespace-pre-wrap">&ldquo;{pkg.description || 'Exclusive gift collection from Mr. Photo.'}&rdquo;</p>
 
               <div className="space-y-3 mb-8 flex-grow">
                  {pkg.features && pkg.features.map((feature, fIdx) => (

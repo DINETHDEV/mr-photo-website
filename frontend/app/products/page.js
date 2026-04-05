@@ -70,39 +70,39 @@ function ProductDetailContent() {
   return (
     <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
       {/* Breadcrumbs */}
-      <nav className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[3px] text-gray-500 mb-12">
+      <nav className="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-[3px] text-gray-500 mb-10 md:mb-16">
         <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-        <ChevronRight size={12} />
+        <ChevronRight size={10} className="text-gray-700" />
         <Link href="/services" className="hover:text-primary transition-colors">Services</Link>
-        <ChevronRight size={12} />
-        <span className="text-primary">{product.name}</span>
+        <ChevronRight size={10} className="text-gray-700" />
+        <span className="text-primary truncate max-w-[150px] sm:max-w-none">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
         {/* Image Section */}
         <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="relative group "
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative group w-full max-w-2xl mx-auto lg:mx-0"
         >
-          <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/20 blur-[100px] -z-10" />
-          <GlassCard className="p-2 border-white/10 rounded-[40px] overflow-hidden aspect-square">
+          <div className="absolute -inset-4 bg-primary/20 blur-[100px] -z-10 rounded-full opacity-50" />
+          <GlassCard className="p-3 border-white/10 rounded-[40px] overflow-hidden aspect-square shadow-2xl relative z-10">
             {product.image ? (
               <img 
                 src={product.image} 
-                className="w-full h-full object-cover rounded-[32px] transition-transform duration-700 group-hover:scale-110" 
+                className="w-full h-full object-cover rounded-[32px] transition-transform duration-1000 group-hover:scale-110" 
                 alt={product.name} 
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center text-gray-700 bg-white/5 rounded-[32px]">
-                <ImageIcon size={120} strokeWidth={1} />
-                <p className="text-sm uppercase font-bold tracking-widest mt-4">No Preview Available</p>
+                <ImageIcon size={100} strokeWidth={1} />
+                <p className="text-[10px] uppercase font-black tracking-widest mt-4">Image Unavailable</p>
               </div>
             )}
             
-            <div className="absolute top-8 left-8 flex flex-col gap-3">
-               <div className="glass px-4 py-2 rounded-full border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                  <Star size={12} fill="currentColor" /> Premium Service
+            <div className="absolute top-8 left-8">
+               <div className="glass px-5 py-2 rounded-full border-primary/30 text-primary text-[10px] font-black uppercase tracking-widest flex items-center gap-2 backdrop-blur-xl shadow-neon-sm">
+                  <Star size={12} fill="currentColor" /> Premium
                </div>
             </div>
           </GlassCard>
@@ -110,85 +110,82 @@ function ProductDetailContent() {
 
         {/* Content Section */}
         <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="space-y-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-12"
         >
-          <div>
-            <span className="text-primary text-[10px] font-black uppercase tracking-[5px] mb-4 block">{product.category}</span>
-            <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">{product.name}</h1>
-            <div className="flex items-center gap-4">
-               <div className="text-4xl font-black text-primary tracking-tighter">LKR {product.price?.toLocaleString()}</div>
-               <div className="glass px-3 py-1 rounded-lg border-white/10 text-gray-500 text-[10px] uppercase font-bold tracking-widest">Base Price</div>
+          <div className="space-y-4">
+            <span className="text-primary text-[10px] font-black uppercase tracking-[6px] block">{product.category}</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">{product.name}</h1>
+            <div className="flex flex-wrap items-center gap-6 pt-4">
+               <div className="text-4xl md:text-5xl font-black text-primary tracking-tighter">LKR {product.price?.toLocaleString()}</div>
+               <div className="glass px-4 py-1.5 rounded-xl border-white/10 text-gray-500 text-[10px] uppercase font-black tracking-widest">Base Rate</div>
             </div>
           </div>
 
           <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-orange-600/30 rounded-[30px] blur opacity-25 group-hover:opacity-40 transition-opacity" />
-            <div className="relative glass p-10 rounded-[30px] border-white/10 bg-white/[0.02] backdrop-blur-xl">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                <h3 className="text-white text-2xl font-black flex items-center gap-3 tracking-tighter uppercase italic">
-                  <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Info size={20} className="text-primary" />
-                  </span>
-                  Service <span className="text-primary">Description</span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 to-orange-600/40 rounded-[35px] blur opacity-20 group-hover:opacity-40 transition-duration-500" />
+            <div className="relative glass p-8 sm:p-10 rounded-[35px] border-white/10 bg-white/[0.02] backdrop-blur-3xl shadow-2xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                <h3 className="text-white text-xl md:text-2xl font-black flex items-center gap-4 tracking-tight uppercase italic underline decoration-primary/20 decoration-4 underline-offset-8">
+                   Service <span className="text-primary">Info</span>
                 </h3>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[2px]">
-                  <CheckCircle2 size={12} /> Professional Quality
+                <div className="w-fit flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[2px]">
+                  <CheckCircle2 size={12} /> Expert Standard
                 </div>
               </div>
-              <div className="space-y-6">
-                <p className="text-gray-300 leading-relaxed text-lg font-medium opacity-90">
-                  {product.description || `Enhance your memories with our ${product.name} service. We prioritize quality and precision to ensure every pixel tells your story perfectly. Our team of professionals treats every project with extreme care and dedication.`}
+              <div className="space-y-8">
+                <p className="text-gray-300 leading-relaxed text-base sm:text-lg font-medium opacity-90 whitespace-pre-wrap italic">
+                  &ldquo;{product.description || `Experience superior quality with our ${product.name} service. We ensure perfection in every detail.`}&rdquo;
                 </p>
-                <div className="flex items-center gap-6 pt-6 border-t border-white/5">
+                <div className="flex items-center gap-6 pt-8 border-t border-white/5">
                   <div className="flex -space-x-3">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-primary/20 flex items-center justify-center">
-                        <ImageIcon size={12} className="text-primary" />
+                      <div key={i} className="w-9 h-9 rounded-full border-2 border-black bg-primary/20 flex items-center justify-center shadow-lg">
+                        <ImageIcon size={14} className="text-primary" />
                       </div>
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Trusted by 10k+ clients</span>
+                  <span className="text-[10px] text-gray-500 font-black uppercase tracking-widest leading-none">Verified Results</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              {features.map((f, i) => (
-                <div key={i} className="flex items-center gap-3 glass p-4 rounded-2xl border-white/5">
-                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                      <CheckCircle2 size={14} className="text-primary" />
+                <div key={i} className="flex items-center gap-4 glass p-5 rounded-2xl border-white/5 hover:border-primary/20 transition-all group/feat">
+                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover/feat:bg-primary group-hover/feat:text-black transition-all">
+                      <CheckCircle2 size={16} className="text-primary group-hover/feat:text-inherit" />
                    </div>
-                   <span className="text-sm text-gray-300 font-medium">{f}</span>
+                   <span className="text-xs text-gray-300 font-black uppercase tracking-widest">{f}</span>
                 </div>
              ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-6 pt-6">
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Link 
               href={`/order?productId=${product._id}`}
-              className="flex-grow btn-primary flex items-center justify-center gap-4 py-6 rounded-3xl shadow-neon text-lg font-black uppercase tracking-widest group"
+              className="flex-grow btn-primary flex items-center justify-center gap-4 py-5 rounded-[24px] shadow-neon text-sm font-black uppercase tracking-[4px] group order-1 sm:order-2"
             >
-              Order This Service <Zap size={20} className="group-hover:fill-primary" />
+              Order Now <Zap size={18} className="group-hover:fill-primary" />
             </Link>
             
             <button 
               onClick={() => router.push('/services')}
-              className="px-10 py-6 glass rounded-3xl border-white/10 text-gray-400 font-black uppercase tracking-widest hover:text-white transition-colors"
+              className="px-10 py-5 glass rounded-[24px] border-white/10 text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all order-2 sm:order-1 text-[10px]"
             >
-               Browse All
+               Back
             </button>
           </div>
 
           {/* Trust Badges */}
-          <div className="flex items-center justify-center sm:justify-start gap-8 pt-8 border-t border-white/5">
-             <div className="flex items-center gap-2 text-gray-500 text-[10px] uppercase font-bold tracking-[2px]">
-                <ShieldCheck size={16} className="text-emerald-500" /> Secure Order
+          <div className="flex items-center justify-center sm:justify-start gap-10 pt-8 border-t border-white/5">
+             <div className="flex items-center gap-2.5 text-gray-500 text-[9px] font-black uppercase tracking-[3px]">
+                <ShieldCheck size={18} className="text-emerald-500" /> Secure
              </div>
-             <div className="flex items-center gap-2 text-gray-500 text-[10px] uppercase font-bold tracking-[2px]">
-                <Zap size={16} className="text-primary" /> Fast Delivery
+             <div className="flex items-center gap-2.5 text-gray-500 text-[9px] font-black uppercase tracking-[3px]">
+                <Zap size={18} className="text-primary fill-primary/20" /> Fast
              </div>
           </div>
         </motion.div>
