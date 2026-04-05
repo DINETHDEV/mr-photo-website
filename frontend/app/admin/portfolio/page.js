@@ -123,16 +123,16 @@ export default function PortfolioManagement() {
          <div>
             <h1 className="text-3xl font-black text-white flex items-center gap-3">
                <ImageIcon className="text-primary" size={32} /> 
-               Portfolio <span className="text-primary italic">Gallery</span>
+               Previous Work <span className="text-primary italic">Gallery</span>
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Manage your studio&apos;s showcased work and before/after sliders.</p>
+            <p className="text-gray-500 text-sm mt-1">Manage your studio&apos;s showcased work and masterpiece gallery.</p>
          </div>
 
          <button 
           onClick={() => { setIsModalOpen(true); resetForm(); }}
           className="btn-primary flex items-center gap-2 px-6 py-4 rounded-2xl shadow-neon group"
         >
-            <Plus size={20} className="group-hover:rotate-90 transition-transform" /> Add Showcase Item
+            <Plus size={20} className="group-hover:rotate-90 transition-transform" /> Add Work Item
          </button>
       </header>
 
