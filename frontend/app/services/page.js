@@ -116,7 +116,7 @@ export default function Services() {
                              </div>
                           )}
                           <div className="flex flex-col min-w-0">
-                             <span className="text-white font-bold group-hover/item:text-primary transition-colors truncate">{item.name}</span>
+                             <span className="text-white font-bold group-hover/item:text-primary transition-colors">{item.name}</span>
                              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest line-clamp-1 italic">{item.description || 'Professional processing'}</span>
                           </div>
                        </div>
