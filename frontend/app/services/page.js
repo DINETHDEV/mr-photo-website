@@ -90,12 +90,12 @@ export default function Services() {
             const items = groupedServices[catName];
 
             return (
-              <GlassCard key={idx} className="relative overflow-hidden group p-6 sm:p-8">
-                <div className="flex items-center gap-4 mb-10">
-                  <div className={`p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 transition-colors ${colorClass}`}>
-                    <Icon size={28} />
+              <GlassCard key={idx} className="relative overflow-hidden group p-4 sm:p-8">
+                <div className="flex items-center gap-4 mb-8 sm:mb-10">
+                  <div className={`p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 transition-colors ${colorClass}`}>
+                    <Icon size={24} />
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white capitalize italic tracking-tight">{catName}</h2>
+                  <h2 className="text-xl sm:text-3xl font-black text-white capitalize italic tracking-tight">{catName}</h2>
                 </div>
 
                 <div className="space-y-3">
@@ -103,33 +103,33 @@ export default function Services() {
                     <Link 
                       key={iIdx} 
                       href={`/products?id=${item._id}`}
-                      className="flex items-center justify-between p-4 rounded-[24px] hover:bg-white/5 border border-transparent hover:border-white/10 transition-all group/item cursor-pointer glass-card-sm"
+                      className="flex items-center justify-between p-3 sm:p-4 rounded-[24px] hover:bg-white/5 border border-transparent hover:border-white/10 transition-all group/item cursor-pointer glass-card-sm"
                     >
-                       <div className="flex items-center gap-4 flex-grow min-w-0">
+                       <div className="flex items-center gap-3 sm:gap-4 flex-grow min-w-0">
                           {item.image ? (
-                             <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/5 shrink-0 shadow-lg group-hover/item:border-primary/20 transition-all">
+                             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 shrink-0 shadow-lg group-hover/item:border-primary/20 transition-all">
                                 <img src={item.image} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" alt={item.name} />
                              </div>
                           ) : (
-                             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 text-gray-700">
-                                <ImageIcon size={24} />
+                             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center shrink-0 text-gray-700">
+                                <ImageIcon size={20} />
                              </div>
                           )}
                           <div className="flex flex-col min-w-0 gap-0.5">
-                             <span className="text-white text-sm sm:text-base font-black group-hover/item:text-primary transition-colors line-clamp-2 leading-tight tracking-tight italic uppercase">
+                             <span className="text-white text-xs sm:text-base font-black group-hover/item:text-primary transition-colors line-clamp-2 leading-tight tracking-tight italic uppercase">
                                 {item.name}
                              </span>
-                             <span className="text-[9px] text-gray-500 font-black uppercase tracking-[2px] line-clamp-1 opacity-60">
+                             <span className="text-[8px] sm:text-[9px] text-gray-500 font-black uppercase tracking-[2px] line-clamp-1 opacity-60">
                                 {item.description || 'Professional processing'}
                              </span>
                           </div>
                        </div>
-                       <div className="flex items-center gap-3 shrink-0 ml-4 pl-4 border-l border-white/5">
+                       <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-white/5">
                           <div className="flex flex-col items-end">
-                             <span className="text-[8px] text-gray-500 font-black uppercase tracking-widest leading-none mb-1">Starting</span>
-                             <span className="text-primary font-black tracking-tighter text-sm sm:text-lg">LKR {item.price.toLocaleString()}</span>
+                             <span className="text-[7px] sm:text-[8px] text-gray-500 font-black uppercase tracking-widest leading-none mb-1">From</span>
+                             <span className="text-primary font-black tracking-tighter text-xs sm:text-lg whitespace-nowrap">LKR {item.price.toLocaleString()}</span>
                           </div>
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary translate-x-2 group-hover/item:translate-x-0 opacity-0 group-hover/item:opacity-100 transition-all">
+                          <div className="hidden sm:flex w-8 h-8 rounded-full bg-primary/10 items-center justify-center text-primary translate-x-2 group-hover/item:translate-x-0 opacity-0 group-hover/item:opacity-100 transition-all">
                              <ArrowRight size={14} />
                           </div>
                        </div>
@@ -137,12 +137,12 @@ export default function Services() {
                   ))}
                 </div>
 
-                <div className="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="mt-8 sm:mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                    <div className="flex items-center gap-2 text-gray-500 text-[10px] font-black uppercase tracking-[4px]">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
                       <span>Custom sizes available</span>
                    </div>
-                   <Link href="/contact" className="px-6 py-2 rounded-full glass border-white/10 text-primary text-[10px] font-black uppercase tracking-widest hover:bg-primary/10 transition-all">
+                   <Link href="/contact" className="w-full sm:w-auto text-center px-6 py-2 rounded-full glass border-white/10 text-primary text-[10px] font-black uppercase tracking-widest hover:bg-primary/10 transition-all">
                       Inquire
                    </Link>
                 </div>

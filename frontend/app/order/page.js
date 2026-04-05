@@ -27,18 +27,21 @@ function OrderFormContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialPackageId = searchParams.get('packageId') || searchParams.get('package');
+  const initialProductId = searchParams.get('productId') || searchParams.get('product');
 
   const [loading, setLoading] = useState(false);
-  const [fetchingPackages, setFetchingPackages] = useState(true);
+  const [fetchingData, setFetchingData] = useState(true);
   const [packages, setPackages] = useState([]);
+  const [products, setProducts] = useState([]);
   const [uploading, setUploading] = useState(false);
   
   const [formData, setFormData] = useState({
     customerName: '',
     phone: '',
     address: '',
-    serviceType: initialPackageId ? 'package' : 'custom',
+    serviceType: initialPackageId ? 'package' : (initialProductId ? 'individual' : 'individual'),
     packageId: initialPackageId || '',
+    productId: initialProductId || '',
     uploadedImage: '',
     message: ''
   });
@@ -46,17 +49,21 @@ function OrderFormContent() {
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
-    const loadPackages = async () => {
+    const loadInitialData = async () => {
       try {
-        const data = await fetchData('packages');
-        setPackages(data || []);
+        const [pkgs, prods] = await Promise.all([
+          fetchData('packages'),
+          fetchData('products')
+        ]);
+        setPackages(pkgs || []);
+        setProducts(prods || []);
       } catch (error) {
-        toast.error("Failed to load packages");
+        toast.error("Failed to load options");
       } finally {
-        setFetchingPackages(false);
+        setFetchingData(false);
       }
     };
-    loadPackages();
+    loadInitialData();
   }, []);
 
   const handleImageUpload = async (e) => {
@@ -198,32 +205,62 @@ function OrderFormContent() {
                   <Sparkles size={14} /> Service Selection
                 </h3>
 
-                <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-2 gap-4">
                    <button 
                     type="button"
-                    onClick={() => setFormData({...formData, serviceType: 'custom', packageId: ''})}
-                    className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${formData.serviceType === 'custom' ? 'bg-primary/10 border-primary shadow-neon-sm' : 'bg-white/5 border-white/10 text-gray-500'}`}
+                    onClick={() => setFormData({...formData, serviceType: 'individual', packageId: ''})}
+                    className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${formData.serviceType === 'individual' ? 'bg-primary/10 border-primary shadow-neon-sm' : 'bg-white/5 border-white/10 text-gray-500'}`}
                    >
-                     <Camera size={20} />
-                     <span className="text-[10px] font-black uppercase tracking-widest">Custom Restoration</span>
+                     <ImageIcon size={20} />
+                     <span className="text-[10px] font-black uppercase tracking-widest text-center">Individual Service</span>
                    </button>
                    <button 
                     type="button"
-                    onClick={() => setFormData({...formData, serviceType: 'package'})}
+                    onClick={() => setFormData({...formData, serviceType: 'package', productId: ''})}
                     className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${formData.serviceType === 'package' ? 'bg-primary/10 border-primary shadow-neon-sm' : 'bg-white/5 border-white/10 text-gray-500'}`}
                    >
                      <PackageIcon size={20} />
-                     <span className="text-[10px] font-black uppercase tracking-widest">Gift Package</span>
+                     <span className="text-[10px] font-black uppercase tracking-widest text-center">Gift Package</span>
                    </button>
                 </div>
 
-                <AnimatePresence>
-                  {formData.serviceType === 'package' && (
+                <AnimatePresence mode="wait">
+                  {formData.serviceType === 'individual' && (
                     <motion.div 
+                      key="individual"
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="space-y-2 overflow-hidden"
+                      className="space-y-3 overflow-hidden"
+                    >
+                       <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Select Service</label>
+                       <div className="relative">
+                          <ImageIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/50" size={18} />
+                          <select 
+                            required={formData.serviceType === 'individual'}
+                            value={formData.productId}
+                            onChange={(e) => setFormData({...formData, productId: e.target.value})}
+                            className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl py-4 pl-12 pr-10 text-white text-sm focus:border-primary/50 outline-none transition-all appearance-none"
+                          >
+                             <option value="" disabled>Choose a service...</option>
+                             {products.map(p => (
+                               <option key={p._id} value={p._id} className="bg-black py-2">{p.name} - LKR {p.price.toLocaleString()}</option>
+                             ))}
+                          </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                             <ArrowRight size={14} className="rotate-90 text-gray-500" />
+                          </div>
+                       </div>
+                    </motion.div>
+                  )}
+
+                  {formData.serviceType === 'package' && (
+                    <motion.div 
+                      key="package"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="space-y-3 overflow-hidden"
                     >
                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Select Package</label>
                        <div className="relative">
@@ -232,13 +269,16 @@ function OrderFormContent() {
                             required={formData.serviceType === 'package'}
                             value={formData.packageId}
                             onChange={(e) => setFormData({...formData, packageId: e.target.value})}
-                            className="w-full bg-black border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:border-primary/50 outline-none transition-all appearance-none"
+                            className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl py-4 pl-12 pr-10 text-white text-sm focus:border-primary/50 outline-none transition-all appearance-none"
                           >
                              <option value="" disabled>Choose a package...</option>
                              {packages.map(p => (
-                               <option key={p._id} value={p._id}>{p.name} - LKR {p.price}</option>
+                               <option key={p._id} value={p._id} className="bg-black py-2">{p.name} - LKR {p.price.toLocaleString()}</option>
                              ))}
                           </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                             <ArrowRight size={14} className="rotate-90 text-gray-500" />
+                          </div>
                        </div>
                     </motion.div>
                   )}
