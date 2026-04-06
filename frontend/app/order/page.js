@@ -321,7 +321,7 @@ function OrderFormContent() {
           className="lg:col-span-2 space-y-6"
         >
           <div className="space-y-4">
-             <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Photo to Restore</h3>
+             <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Upload Photo</h3>
              <div className="relative group">
                 <input 
                   type="file" 
