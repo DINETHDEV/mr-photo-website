@@ -10,7 +10,7 @@ const router = express.Router();
 // @desc    Create a new order
 // @access  Public
 router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) => {
-  const { customerName, phone, address, serviceType, packageId, message, uploadedImage: bodyImage } = req.body;
+  const { customerName, phone, address, serviceType, packageId, productId, message, uploadedImage: bodyImage } = req.body;
 
   if (!customerName || !phone || !address || !serviceType) {
     res.status(400);
@@ -23,6 +23,7 @@ router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) =
     address,
     serviceType,
     packageId: packageId || undefined,
+    productId: productId || undefined,
     message,
     uploadedImage: req.file ? req.file.path : bodyImage
   });
@@ -35,7 +36,10 @@ router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) =
 // @desc    Get all orders
 // @access  Private/Admin
 router.get('/', protect, admin, asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('packageId', 'name price').sort({ createdAt: -1 });
+  const orders = await Order.find({})
+    .populate('packageId', 'name price')
+    .populate('productId', 'name price')
+    .sort({ createdAt: -1 });
   res.json(orders);
 }));
 
@@ -43,7 +47,9 @@ router.get('/', protect, admin, asyncHandler(async (req, res) => {
 // @desc    Get order by ID
 // @access  Private/Admin
 router.get('/:id', protect, admin, asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate('packageId', 'name price');
+  const order = await Order.findById(req.params.id)
+    .populate('packageId', 'name price')
+    .populate('productId', 'name price');
 
   if (order) {
     res.json(order);

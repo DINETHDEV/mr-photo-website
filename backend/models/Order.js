@@ -14,12 +14,16 @@ const orderSchema = new mongoose.Schema({
     required: true
   },
   serviceType: {
-    type: String, // e.g., 'package', 'custom'
+    type: String, // e.g., 'package', 'individual'
     required: true
   },
   packageId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Package'
+  },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
   },
   uploadedImage: {
     type: String // Cloudinary URL

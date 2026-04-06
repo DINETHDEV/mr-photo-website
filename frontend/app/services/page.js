@@ -24,6 +24,7 @@ const categoryIcons = {
   'design': ImageIcon,
   'printing': Printer,
   'frame': Ruler,
+  'frames': Ruler,
   'frame only': Ruler,
   'full package': Package,
   'laminating': Info,
@@ -35,6 +36,7 @@ const categoryColors = {
   'design': 'text-purple-400',
   'printing': 'text-orange-400',
   'frame': 'text-emerald-400',
+  'frames': 'text-emerald-400',
   'frame only': 'text-emerald-400',
   'full package': 'text-primary',
   'default': 'text-primary'
