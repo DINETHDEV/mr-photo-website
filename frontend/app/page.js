@@ -58,12 +58,12 @@ export default function Home() {
                <Camera size={14} /> Premier Photo Studio
             </div>
             
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-white leading-[0.95] tracking-tighter">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tighter">
               VALUE FOR <br />
               EVERY <span className="text-primary italic">CUSTOMER.</span>
             </h1>
             
-            <p className="text-gray-400 text-lg md:text-xl max-w-xl leading-relaxed">
+            <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-xl leading-relaxed">
               Experience prestige photo restoration, customized digital design, and premium framing services in Sri Lanka. We preserve your precious memories forever.
             </p>
             
@@ -137,7 +137,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-xs font-black text-primary uppercase tracking-[5px]">Expertise</h2>
-            <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">Everything For Your <span className="text-primary">Photos.</span></h3>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white italic tracking-tighter">Everything For Your <span className="text-primary">Photos.</span></h3>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -154,8 +154,8 @@ export default function Home() {
                     <f.icon size={28} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{f.title}</h4>
-                    <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                    <h4 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{f.title}</h4>
+                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{f.desc}</p>
                   </div>
                 </GlassCard>
               </motion.div>
@@ -175,7 +175,7 @@ export default function Home() {
         >
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none tracking-tighter uppercase">READY TO BRING <br /> MEMORIES TO <span className="text-primary italic underline decoration-primary/20 underline-offset-8">LIFE?</span></h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-none tracking-tighter uppercase">READY TO BRING <br /> MEMORIES TO <span className="text-primary italic underline decoration-primary/20 underline-offset-8">LIFE?</span></h2>
             <p className="text-gray-400 text-lg max-w-xl mx-auto">
               Our experts are waiting to handle your precious photos with extreme care and professionalism. Get started today.
             </p>

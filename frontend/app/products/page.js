@@ -117,9 +117,9 @@ function ProductDetailContent() {
         >
           <div className="space-y-4">
             <span className="text-primary text-[10px] font-black uppercase tracking-[6px] block">{product.category}</span>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">{product.name}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase italic">{product.name}</h1>
             <div className="flex flex-wrap items-center gap-6 pt-4">
-               <div className="text-4xl md:text-5xl font-black text-primary tracking-tighter">LKR {product.price?.toLocaleString()}</div>
+               <div className="text-3xl sm:text-4xl md:text-5xl font-black text-primary tracking-tighter">LKR {product.price?.toLocaleString()}</div>
                <div className="glass px-4 py-1.5 rounded-xl border-white/10 text-gray-500 text-[10px] uppercase font-black tracking-widest">Base Rate</div>
             </div>
           </div>
@@ -128,7 +128,7 @@ function ProductDetailContent() {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/40 to-orange-600/40 rounded-[35px] blur opacity-20 group-hover:opacity-40 transition-duration-500" />
             <div className="relative glass p-8 sm:p-10 rounded-[35px] border-white/10 bg-white/[0.02] backdrop-blur-3xl shadow-2xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
-                <h3 className="text-white text-xl md:text-2xl font-black flex items-center gap-4 tracking-tight uppercase italic underline decoration-primary/20 decoration-4 underline-offset-8">
+                <h3 className="text-white text-lg sm:text-xl md:text-2xl font-black flex items-center gap-4 tracking-tight uppercase italic underline decoration-primary/20 decoration-4 underline-offset-8">
                    Service <span className="text-primary">Info</span>
                 </h3>
                 <div className="w-fit flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[2px]">
@@ -136,7 +136,7 @@ function ProductDetailContent() {
                 </div>
               </div>
               <div className="space-y-8">
-                <p className="text-gray-300 leading-relaxed text-base sm:text-lg font-medium opacity-90 whitespace-pre-wrap italic">
+                <p className="text-gray-300 leading-relaxed text-sm sm:text-base md:text-lg font-medium opacity-90 whitespace-pre-wrap italic">
                   &ldquo;{product.description || `Experience superior quality with our ${product.name} service. We ensure perfection in every detail.`}&rdquo;
                 </p>
                 <div className="flex items-center gap-6 pt-8 border-t border-white/5">

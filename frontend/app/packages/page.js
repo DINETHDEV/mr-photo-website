@@ -39,8 +39,8 @@ export default function Packages() {
         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full glass border-primary/20 text-primary text-[10px] font-bold uppercase tracking-[4px] mb-6">
           <Gift size={14} /> Gift Collections
         </div>
-        <h1 className="text-4xl md:text-7xl font-black text-white mb-6">Premium <span className="text-primary italic">Gift Packages</span></h1>
-        <p className="max-w-xl mx-auto text-gray-400 text-lg">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-6">Premium <span className="text-primary italic">Gift Packages</span></h1>
+        <p className="max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
            Specially curated bundles to save you money and deliver the most impactful photo experiences.
         </p>
       </div>
@@ -59,7 +59,7 @@ export default function Packages() {
                  </div>
               </div>
 
-              <h3 className="text-2xl font-black text-white mb-2">{pkg.name}</h3>
+              <h3 className="text-xl sm:text-2xl font-black text-white mb-2">{pkg.name}</h3>
               <p className="text-gray-500 text-sm italic mb-6 leading-relaxed whitespace-pre-wrap">&ldquo;{pkg.description || 'Exclusive gift collection from Mr. Photo.'}&rdquo;</p>
 
               <div className="space-y-3 mb-8 flex-grow">
@@ -77,7 +77,7 @@ export default function Packages() {
                  <div>
                     <span className="block text-[10px] text-gray-500 uppercase tracking-widest font-bold">Price</span>
                     <div className="flex items-baseline gap-1">
-                       <span className="text-primary text-2xl font-black tracking-tighter">LKR {pkg.price.toLocaleString()}</span>
+                       <span className="text-primary text-xl sm:text-2xl font-black tracking-tighter">LKR {pkg.price.toLocaleString()}</span>
                     </div>
                  </div>
                  <Link 

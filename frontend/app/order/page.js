@@ -132,7 +132,7 @@ function OrderFormContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-6xl font-black text-white italic tracking-tighter"
+          className="text-3xl sm:text-5xl md:text-6xl font-black text-white italic tracking-tighter"
         >
           BRING MEMORIES TO <span className="text-primary italic underline decoration-primary/20 underline-offset-8">LIFE.</span>
         </motion.h1>

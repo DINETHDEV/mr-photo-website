@@ -83,8 +83,8 @@ export default function Services() {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-primary/20 text-primary text-[10px] font-black uppercase tracking-[4px] mb-8">
           <Briefcase size={14} /> Official Price List
         </div>
-        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white mb-6 uppercase italic tracking-tighter">Services & <span className="text-primary italic">Pricing</span></h1>
-        <p className="max-w-2xl mx-auto text-gray-400 text-base md:text-lg leading-relaxed px-4">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white mb-6 uppercase italic tracking-tighter">Services & <span className="text-primary italic">Pricing</span></h1>
+        <p className="max-w-2xl mx-auto text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed px-4">
           Explore our professional photo restoration and printing services. Our prices are transparent and tailored to deliver the highest quality.
         </p>
       </div>
@@ -102,7 +102,7 @@ export default function Services() {
                   <div className={`p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:border-primary/50 transition-colors ${colorClass}`}>
                     <Icon size={24} />
                   </div>
-                  <h2 className="text-xl sm:text-3xl font-black text-white capitalize italic tracking-tight">{catName}</h2>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white capitalize italic tracking-tight">{catName}</h2>
                 </div>
 
                 <div className="space-y-3">
@@ -123,7 +123,7 @@ export default function Services() {
                              </div>
                           )}
                           <div className="flex flex-col min-w-0 gap-0.5">
-                             <span className="text-white text-xs sm:text-base font-black group-hover/item:text-primary transition-colors line-clamp-2 leading-tight tracking-tight italic uppercase">
+                             <span className="text-white text-sm sm:text-base md:text-lg font-black group-hover/item:text-primary transition-colors line-clamp-2 leading-tight tracking-tight italic uppercase">
                                 {item.name}
                              </span>
                              <span className="text-[8px] sm:text-[9px] text-gray-500 font-black uppercase tracking-[2px] line-clamp-1 opacity-60">
@@ -134,7 +134,7 @@ export default function Services() {
                        <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-white/5">
                           <div className="flex flex-col items-end">
                              <span className="text-[7px] sm:text-[8px] text-gray-500 font-black uppercase tracking-widest leading-none mb-1">From</span>
-                             <span className="text-primary font-black tracking-tighter text-xs sm:text-lg whitespace-nowrap">LKR {item.price.toLocaleString()}</span>
+                             <span className="text-primary font-black tracking-tighter text-sm sm:text-lg whitespace-nowrap">LKR {item.price.toLocaleString()}</span>
                           </div>
                           <div className="hidden sm:flex w-8 h-8 rounded-full bg-primary/10 items-center justify-center text-primary translate-x-2 group-hover/item:translate-x-0 opacity-0 group-hover/item:opacity-100 transition-all">
                              <ArrowRight size={14} />
