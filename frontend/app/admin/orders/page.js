@@ -301,6 +301,54 @@ export default function OrdersManagement() {
                   </div>
                 </div>
 
+                {/* ── Order Content ── */}
+                <div className="space-y-4 pt-2 border-t border-white/5">
+                  <h4 className="text-[9px] font-black text-gray-500 uppercase tracking-[3px] border-b border-white/5 pb-2">
+                    Order Content
+                  </h4>
+                  <div className="glass p-5 rounded-2xl border-white/5 space-y-4 bg-white/[0.01]">
+                    {selectedOrder.serviceType === 'individual' && selectedOrder.productId ? (
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                            <ImageIcon size={18} />
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest block">Individual Service</span>
+                            <span className="text-xs text-white font-black">{selectedOrder.productId.name}</span>
+                          </div>
+                        </div>
+                        <span className="text-xs text-primary font-black">LKR {selectedOrder.productId.price?.toLocaleString()}</span>
+                      </div>
+                    ) : selectedOrder.serviceType === 'package' && selectedOrder.packageId ? (
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                            <ShoppingBag size={18} />
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest block">Gift Package</span>
+                            <span className="text-xs text-white font-black">{selectedOrder.packageId.name}</span>
+                          </div>
+                        </div>
+                        <span className="text-xs text-primary font-black">LKR {selectedOrder.packageId.price?.toLocaleString()}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3 text-gray-600">
+                        <AlertCircle size={16} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Item details not found</span>
+                      </div>
+                    )}
+                    
+                    <div className="pt-4 border-t border-white/5 flex justify-between items-center">
+                      <span className="text-[10px] text-gray-400 font-black uppercase tracking-[3px]">Total Amount</span>
+                      <span className="text-lg text-primary font-black italic tracking-tighter">
+                        LKR {(selectedOrder.productId?.price || selectedOrder.packageId?.price || 0).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Customer Info */}
                 <div className="space-y-4 pt-2 border-t border-white/5">
                   <div className="flex gap-3">
