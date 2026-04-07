@@ -101,7 +101,14 @@ function OrderFormContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.uploadedImage) {
+    const selectedProduct = products.find(p => p._id === formData.productId);
+    const selectedPackage = packages.find(p => p._id === formData.packageId);
+    
+    const isFrameOnly = (selectedProduct?.category === 'frame only') || 
+                      (selectedProduct?.name?.toLowerCase().includes('frame only')) ||
+                      (selectedPackage?.name?.toLowerCase().includes('frame only'));
+
+    if (!isFrameOnly && !formData.uploadedImage) {
       toast.error("Please upload your photo first");
       return;
     }
@@ -321,7 +328,16 @@ function OrderFormContent() {
           className="lg:col-span-2 space-y-6"
         >
           <div className="space-y-4">
-             <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Upload Photo</h3>
+             <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+               Upload Photo {(() => {
+                 const selectedProduct = products.find(p => p._id === formData.productId);
+                 const selectedPackage = packages.find(p => p._id === formData.packageId);
+                 const isFrameOnly = (selectedProduct?.category === 'frame only') || 
+                                   (selectedProduct?.name?.toLowerCase().includes('frame only')) ||
+                                   (selectedPackage?.name?.toLowerCase().includes('frame only'));
+                 return isFrameOnly ? <span className="text-primary/60 lowercase italic">(Optional)</span> : "";
+               })()}
+             </h3>
              <div className="relative group">
                 <input 
                   type="file" 
