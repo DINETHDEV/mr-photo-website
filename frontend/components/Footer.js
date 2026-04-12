@@ -89,7 +89,7 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} MR Photo Studio. All rights reserved.
         </p>
         <p className="text-gray-600 text-[10px] uppercase tracking-[4px]">
-          Design by DineX Dev
+          Design by GridX Dev Studio
         </p>
       </div>
     </footer>

@@ -167,7 +167,7 @@ npm start
 
 <div align="center">
 
-Made with ❤️ by **DineX Dev**
+Made with ❤️ by **GridX Dev Studio**
 
 *© 2025 MR Photo Studio · All Rights Reserved*
 
