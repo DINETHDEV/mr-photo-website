@@ -1,6 +1,7 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const Review = require('../models/Review');
+const Notification = require('../models/Notification');
 const { protect, admin } = require('../middleware/auth');
 const { upload } = require('../utils/cloudinary');
 
@@ -37,6 +38,16 @@ router.post('/', upload.single('image'), asyncHandler(async (req, res) => {
   });
 
   const createdReview = await review.save();
+
+  // Create notification
+  await Notification.create({
+    title: 'New Review Submitted',
+    message: `${name} has submitted a new review (Pending Approval).`,
+    type: 'review',
+    relatedId: createdReview._id,
+    onModel: 'Review'
+  });
+
   res.status(201).json(createdReview);
 }));
 

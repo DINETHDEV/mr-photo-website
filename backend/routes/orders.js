@@ -1,6 +1,7 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
+const Notification = require('../models/Notification');
 const { protect, admin } = require('../middleware/auth');
 const { upload } = require('../utils/cloudinary');
 
@@ -29,6 +30,16 @@ router.post('/', upload.single('uploadedImage'), asyncHandler(async (req, res) =
   });
 
   const createdOrder = await order.save();
+
+  // Create notification
+  await Notification.create({
+    title: 'New Order Received',
+    message: `You have a new order from ${customerName}.`,
+    type: 'order',
+    relatedId: createdOrder._id,
+    onModel: 'Order'
+  });
+
   res.status(201).json(createdOrder);
 }));
 

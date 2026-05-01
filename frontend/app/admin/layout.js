@@ -14,9 +14,11 @@ import {
   Menu, 
   X,
   Loader2,
-  Camera
+  Camera,
+  Bell
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { fetchAdminData } from '@/utils/adminApi';
 
 const sidebarLinks = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -31,10 +33,11 @@ export default function AdminLayout({ children }) {
   // Sidebar closed by default — will open on desktop via useEffect
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
 
-  // ── Auth check ──────────────────────────────────────────────────────────────
+  // ── Auth & Data check ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const token = localStorage.getItem('token');
     const isLoginPage = pathname?.startsWith('/admin/login');
@@ -48,6 +51,16 @@ export default function AdminLayout({ children }) {
       return;
     }
     setIsLoading(false);
+
+    if (token && !isLoginPage) {
+      fetchAdminData('notifications')
+        .then(data => {
+          if (data && Array.isArray(data)) {
+            setUnreadCount(data.filter(n => !n.read).length);
+          }
+        })
+        .catch(console.error);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
@@ -194,7 +207,15 @@ export default function AdminLayout({ children }) {
             >
               Visit Main Site
             </Link>
-            <div className="flex items-center gap-2 glass py-1.5 pl-1.5 pr-3 rounded-full border-white/10">
+            
+            <Link href="/admin/notifications" className="relative p-2 glass rounded-xl text-gray-400 hover:text-primary hover:border-primary/40 transition-all">
+              <Bell size={20} />
+              {unreadCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full shadow-[0_0_10px_rgba(239,68,68,1)] border-2 border-black"></span>
+              )}
+            </Link>
+
+            <div className="flex items-center gap-2 glass py-1.5 pl-1.5 pr-3 rounded-full border-white/10 ml-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-orange-600 flex items-center justify-center font-black text-black text-xs uppercase shrink-0">
                 MP
               </div>

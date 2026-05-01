@@ -49,6 +49,7 @@ app.use('/api/packages', require('./routes/packages'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MR Photo API running 📸' }));
