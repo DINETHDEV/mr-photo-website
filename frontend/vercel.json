@@ -1,9 +1,4 @@
 {
-  "version": 2,
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/out",
-  "installCommand": "echo 'skip'",
-  "framework": null,
   "rewrites": [
     {
       "source": "/api/:path*",
