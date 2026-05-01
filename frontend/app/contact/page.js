@@ -45,7 +45,7 @@ export default function Contact() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-primary/20 text-primary text-[10px] font-bold uppercase tracking-[4px] mb-4">
               <MessageCircle size={14} /> Get In Touch
             </div>
-            <h1 className="text-4xl md:text-7xl font-black text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white leading-tight">
                Let&apos;s Build Your <br />
                <span className="text-primary italic">Perfect Memory.</span>
             </h1>

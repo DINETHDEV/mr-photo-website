@@ -62,7 +62,7 @@ export default function Services() {
 
   // Group services by category
   const groupedServices = dbServices.reduce((acc, product) => {
-    const cat = product.category.toLowerCase();
+    const cat = (product.category || 'other').toLowerCase();
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(product);
     return acc;
@@ -134,7 +134,7 @@ export default function Services() {
                        <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-white/5">
                           <div className="flex flex-col items-end">
                              <span className="text-[7px] sm:text-[8px] text-gray-500 font-black uppercase tracking-widest leading-none mb-1">From</span>
-                             <span className="text-primary font-black tracking-tighter text-sm sm:text-lg whitespace-nowrap">LKR {item.price.toLocaleString()}</span>
+                             <span className="text-primary font-black tracking-tighter text-sm sm:text-lg whitespace-nowrap">LKR {(item.price || 0).toLocaleString()}</span>
                           </div>
                           <div className="hidden sm:flex w-8 h-8 rounded-full bg-primary/10 items-center justify-center text-primary translate-x-2 group-hover/item:translate-x-0 opacity-0 group-hover/item:opacity-100 transition-all">
                              <ArrowRight size={14} />

@@ -48,17 +48,17 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex items-center">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div 
+        <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-primary/20 text-primary text-[10px] font-black uppercase tracking-[4px]">
                <Camera size={14} /> Premier Photo Studio
             </div>
             
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-[0.95] tracking-tighter">
               VALUE FOR <br />
               EVERY <span className="text-primary italic">CUSTOMER.</span>
             </h1>
@@ -99,7 +99,7 @@ export default function Home() {
                duration: 1,
                y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
             }}
-            className="hidden sm:block lg:perspective-1000"
+            className="lg:perspective-1000"
           >
             <div className="relative glass border-primary/10 rounded-[40px] p-6 lg:p-10 overflow-hidden lg:transform-style-3d group">
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity" />

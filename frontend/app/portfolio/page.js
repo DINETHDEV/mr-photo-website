@@ -45,7 +45,7 @@ export default function Portfolio() {
       setFilteredItems(items);
     } else {
       setFilteredItems(items.filter(item => 
-        item.category.toLowerCase() === activeCategory.toLowerCase() ||
+        (item.category || '').toLowerCase() === activeCategory.toLowerCase() ||
         (activeCategory === 'Restoration' && item.category === 'Photo Restoration') ||
         (activeCategory === 'Design' && item.category === 'Photo Design')
       ));

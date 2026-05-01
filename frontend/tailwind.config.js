@@ -11,7 +11,7 @@ module.exports = {
         background: '#0a0a0a',
         foreground: '#ededed',
         primary: {
-          DEFAULT: '#ffaa00', // Gold/Yellow tone from the MR Photo logo
+          DEFAULT: '#ffaa00',
           glow: 'rgba(255, 170, 0, 0.5)'
         },
         surface: 'rgba(25, 25, 25, 0.7)',
@@ -22,12 +22,17 @@ module.exports = {
         'neon-gradient': 'linear-gradient(45deg, #ffaa00, #ff6600)',
       },
       boxShadow: {
-        'neon': '0 0 15px var(--tw-shadow-color)',
-        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+        'neon': '0 0 20px rgba(255,170,0,0.4), 0 0 40px rgba(255,170,0,0.1)',
+        'neon-sm': '0 0 10px rgba(255,170,0,0.3)',
+        'neon-xl': '0 0 40px rgba(255,170,0,0.5), 0 0 80px rgba(255,170,0,0.2)',
+        'glass': '0 4px 30px rgba(0, 0, 0, 0.3)',
       },
       backdropBlur: {
         'glass': '10px',
-      }
+      },
+      perspective: {
+        '1000': '1000px',
+      },
     },
   },
   plugins: [],

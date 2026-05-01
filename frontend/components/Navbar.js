@@ -49,14 +49,15 @@ export default function Navbar() {
              {/* Premium Logo Container */}
              <div className="relative glass p-1.5 rounded-[22px] border-white/10 group-hover:border-primary/40 group-hover:scale-105 transition-all duration-500 shadow-2xl overflow-hidden bg-white/5 backdrop-blur-3xl">
                 <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <img 
-                  src="/images/logo.png" 
-                  className="w-full h-full object-contain rounded-xl" 
-                  alt="MR Photo"
-                  onError={(e) => {
-                     e.target.src = "https://via.placeholder.com/100?text=MR+PHOTO";
-                  }}
-                />
+                 <img 
+                   src="/images/logo.png" 
+                   className="w-full h-full object-contain rounded-xl" 
+                   alt="MR Photo"
+                   onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = '<span class="text-primary font-black text-lg">MR</span>';
+                   }}
+                 />
              </div>
           </div>
           <div className="flex flex-col">
@@ -93,7 +94,9 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl glass border-white/10 text-white" 
+          className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl glass border-white/10 text-white"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -107,7 +110,8 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            className="md:hidden absolute top-full left-0 w-full glass-card border-none rounded-none border-t border-white/10 shadow-2xl p-8 flex flex-col gap-2 min-h-[60vh] bg-black/90 backdrop-blur-3xl overflow-y-auto"
+            className="md:hidden absolute top-full left-0 w-full glass-card border-none rounded-none border-t border-white/10 shadow-2xl p-6 sm:p-8 flex flex-col gap-2 bg-black/95 backdrop-blur-3xl overflow-y-auto"
+            style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
             <div className="text-[10px] font-black text-primary uppercase tracking-[5px] mb-4 opacity-50">Navigation</div>
             <div className="grid grid-cols-1 gap-1">

@@ -17,7 +17,8 @@ import {
   Image as ImageIcon,
   Package as PackageIcon,
   X,
-  Camera
+  Camera,
+  ShieldCheck
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import GlassCard from '@/components/GlassCard';
@@ -347,10 +348,10 @@ function OrderFormContent() {
                   id="imageUpload"
                   disabled={uploading}
                 />
-                <label 
-                  htmlFor="imageUpload"
-                  className={`relative block aspect-[4/5] rounded-[40px] border-2 border-dashed transition-all cursor-pointer overflow-hidden group/upload ${imagePreview ? 'border-primary/50' : 'border-white/10 hover:border-primary/30 bg-white/5'}`}
-                >
+                 <label 
+                   htmlFor="imageUpload"
+                   className={`relative block aspect-[3/4] sm:aspect-[4/5] rounded-[32px] border-2 border-dashed transition-all cursor-pointer overflow-hidden group/upload ${imagePreview ? 'border-primary/50' : 'border-white/10 hover:border-primary/30 bg-white/5'}`}
+                 >
                   {imagePreview ? (
                     <>
                       <img src={imagePreview} className="w-full h-full object-cover" alt="Preview" />
@@ -431,21 +432,3 @@ export default function OrderPage() {
   );
 }
 
-function ShieldCheck({ size, className }) {
-   return (
-     <svg 
-       width={size} 
-       height={size} 
-       viewBox="0 0 24 24" 
-       fill="none" 
-       stroke="currentColor" 
-       strokeWidth="2" 
-       strokeLinecap="round" 
-       strokeLinejoin="round" 
-       className={className}
-     >
-       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-       <path d="m9 12 2 2 4-4" />
-     </svg>
-   );
-}

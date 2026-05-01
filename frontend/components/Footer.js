@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { Camera, Mail, Phone, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Camera, Mail, Phone, MapPin, Facebook, Instagram } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-white/10 glass py-12 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="mt-16 sm:mt-20 border-t border-white/10 glass py-12 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
         {/* Brand Section */}
-        <div className="space-y-6">
+        <div className="col-span-2 md:col-span-1 space-y-6">
           <Link href="/" className="flex items-center gap-4 group">
              <div className="relative w-14 h-14 bg-white/5 rounded-[22px] flex items-center justify-center p-1.5 border border-white/10 group-hover:border-primary/40 transition-all duration-500 shadow-2xl backdrop-blur-3xl overflow-hidden">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />

@@ -5,10 +5,29 @@ import ClientWrapper from '@/components/ClientWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#ffaa00',
+};
+
 export const metadata = {
   title: 'MR Photo | Value For Every Customer',
-  description: 'Premium photo restoration, design, and printing services in Sri Lanka.',
-  keywords: 'photo restoration, photo design, photo printing, frames, Sri Lanka, MR Photo',
+  description: 'Premium photo restoration, design, and printing services in Sri Lanka. We bring your memories back to life.',
+  keywords: 'photo restoration, photo design, photo printing, frames, Sri Lanka, MR Photo, Kalutara',
+  themeColor: '#ffaa00',
+  openGraph: {
+    title: 'MR Photo | Premier Photo Studio Sri Lanka',
+    description: 'Premium photo restoration, digital design, and printing services in Sri Lanka.',
+    type: 'website',
+    locale: 'en_LK',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'MR Photo',
+  },
 };
 
 export default function RootLayout({ children }) {

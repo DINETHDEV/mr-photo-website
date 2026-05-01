@@ -9,11 +9,40 @@
   --foreground: #ededed;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  /* Safe area insets for notched phones */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  /* Prevent pull-to-refresh jank on mobile */
+  overscroll-behavior-y: none;
+  /* Remove tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Better touch targets on mobile */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Better input styling on iOS */
+input, textarea, select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+
+input[type="file"] {
+  -webkit-appearance: none;
 }
 
 @layer components {
@@ -30,29 +59,49 @@ body {
   }
 
   .neon-border {
-    @apply border border-primary shadow-neon;
-    box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.3), 0 0 30px rgba(255, 170, 0, 0.1);
+    border-color: rgba(255, 170, 0, 0.5);
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-primary text-black font-bold rounded-xl hover:scale-105 transition-transform duration-200 neon-border border-none;
+    @apply px-6 py-3 bg-primary text-black font-bold rounded-xl transition-all duration-200;
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.4), 0 0 40px rgba(255, 170, 0, 0.1);
+  }
+
+  .btn-primary:hover {
+    @apply scale-105;
+    box-shadow: 0 0 30px rgba(255, 170, 0, 0.6), 0 0 60px rgba(255, 170, 0, 0.2);
   }
 
   .btn-outline {
     @apply px-6 py-3 border border-primary text-primary font-bold rounded-xl hover:bg-primary/10 transition-all duration-200;
   }
+
+  .shadow-neon {
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.4), 0 0 40px rgba(255, 170, 0, 0.1);
+  }
+
+  .shadow-neon-sm {
+    box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+  }
+
+  .shadow-neon-xl {
+    box-shadow: 0 0 40px rgba(255, 170, 0, 0.5), 0 0 80px rgba(255, 170, 0, 0.2);
+  }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #111;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
+/* Custom Scrollbar — hidden on mobile for cleaner look */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #111;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+  }
 }
 
 /* Animated Gradient Background */
@@ -66,4 +115,27 @@ body {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Slow spin animation for empty states */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Prevent image drag on mobile */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Fix for mobile viewport with bottom bars */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  }
 }

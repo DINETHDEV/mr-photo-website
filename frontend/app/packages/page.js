@@ -50,10 +50,15 @@ export default function Packages() {
           {packages.map((pkg, idx) => (
             <GlassCard 
               key={pkg._id} 
-              className={`relative flex flex-col h-full border-2 ${pkg.isActive ? 'border-primary/40 shadow-neon scale-105 z-10' : 'border-white/5 opacity-90 hover:opacity-100 hover:scale-105 transition-all'}`}
+              className={`relative flex flex-col h-full border-2 transition-all duration-300 hover:scale-[1.02] ${pkg.isActive ? 'border-primary/40 shadow-neon' : 'border-white/5 opacity-90 hover:opacity-100'}`}
             >
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-black/40">
-                 <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                 <img 
+                   src={pkg.image} 
+                   alt={pkg.name} 
+                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                   onError={(e) => { e.target.style.display='none'; }}
+                 />
                  <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary to-orange-600 rounded-bl-[40px] flex items-center justify-center p-4 shadow-xl`}>
                     <Camera size={24} className="text-white" />
                  </div>
