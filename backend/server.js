@@ -77,12 +77,20 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB Connected Successfully');
-    app.listen(PORT, () => console.log(`🚀 MR Photo API running on port ${PORT}`));
+    // Only listen if not running in Vercel serverless environment
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => console.log(`🚀 MR Photo API running on port ${PORT}`));
+    }
   })
   .catch((err) => {
     console.error('❌ MONGODB CONNECTION ERROR:', err.message);
     if (err.name === 'MongoNetworkError') {
       console.error('👉 TIP: Check your MongoDB Atlas "Network Access" settings and allow "0.0.0.0/0"');
     }
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+       process.exit(1);
+    }
   });
+
+// Export the Express API for Vercel Serverless
+module.exports = app;
