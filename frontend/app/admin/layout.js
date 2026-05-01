@@ -37,7 +37,7 @@ export default function AdminLayout({ children }) {
   // ── Auth check ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const isLoginPage = pathname === '/admin/login';
+    const isLoginPage = pathname?.startsWith('/admin/login');
 
     if (!token && !isLoginPage) {
       router.replace('/admin/login');
@@ -85,7 +85,7 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  if (pathname === '/admin/login') {
+  if (pathname?.startsWith('/admin/login')) {
     return <>{children}</>;
   }
 
