@@ -16,6 +16,8 @@
 
 ---
 
+https://sl1nk.com/diyo4b6
+
 > A production-ready full-stack studio platform with a premium glassmorphic UI, real-time admin dashboard, Cloudinary image uploads, and WhatsApp integration — deployed as a single monolith on Render.
 
 </div>

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import GlassCard from '@/components/GlassCard';
+import ReviewsSection from '@/components/ReviewsSection';
 
 export default function Home() {
   const features = [
@@ -163,6 +164,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewsSection />
 
       {/* CTA Section */}
       <section className="py-24 px-6 relative overflow-hidden">
